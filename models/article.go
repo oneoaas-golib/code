@@ -55,7 +55,7 @@ func AddArticle(title, category, content string) error {
 	err = o.Read(cate, "Name")
 	if err != nil {
 		cate.Count++
-		err = o.Update(cate, "Count")
+		_, err = o.Update(cate, "Count")
 	}
 	return err
 }
@@ -132,13 +132,13 @@ func DelArticle(aid string) error {
 func GetArticle(aid string) (*Article, error) {
 	id, err := strconv.ParseInt(aid, 10, 64)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	article := &Article{Id: id}
 	o := orm.NewOrm()
 	err = o.Read(article)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	article.Views++
 	_, err = o.Update(article)
@@ -146,7 +146,9 @@ func GetArticle(aid string) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(start, offset, string) ([]*Article, error) {
+func GetArticles(start, offset string) ([]*Article, error) {
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
+	_, err := o.QueryTable("article").All(&articles)
+	return articles, err
 }

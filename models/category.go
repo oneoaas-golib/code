@@ -1,9 +1,7 @@
 package models
 
 import (
-	"errors"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"time"
 )
 
@@ -27,15 +25,29 @@ func (this *Category) TableEngine() string {
 	return "INNODB"
 }
 
-func AddCategory(name string) error {}
+func AddCategory(name string) error {
+	return nil
+}
 
-func EditCategory(cid, name string) error {}
+func EditCategory(cid, name string) error {
+	return nil
 
-func DelCategory(cid string) error {}
+}
 
-func GetCategory(cid string) (*Category, error) {}
+func DelCategory(cid string) error {
+	return nil
 
-func GetCategories(start, offset string) ([]*Category, error) {}
+}
+
+func GetCategory(cid string) (*Category, error) {
+	return nil, nil
+
+}
+
+func GetCategories(start, offset string) ([]*Category, error) {
+	return nil, nil
+
+}
 
 /* End of file : category.go */
 /* Location : ./models/category.go */
