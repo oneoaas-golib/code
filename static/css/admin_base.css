@@ -1,0 +1,147 @@
+@charset "utf-8";
+body, ul, ol, dl, dt, dd, li, p, h1, h2, h3, h4, h5, h6, form, fieldset, table, caption, th, td, img, div{margin:0; padding:0; border:0}
+html, body{color:#000; font:12px 'Microsoft YaHei', Verdana, Arial, Tahoma; height:100%; background:#FFF}
+address, caption, cite, code, pre, em, var, u, i {font-weight:normal; font-style:normal}
+select, img, label, input, textarea{font:12px 'Microsoft YaHei'; vertical-align:middle; margin:0; padding:0}
+select{font:12px 'Microsoft YaHei'; height:24px; line-height:18px; border:1px solid #CCC; padding:2px; border-radius:2px}
+label{cursor:pointer}
+ul{list-style-type:none; border:none}
+a{text-decoration:none;color:#000000;}
+a:hover{color:#ff6666;text-decoration: none;}
+.hide {display: none;}
+.input-item-text{
+display: block;
+width: 100%;
+height: 28px;
+padding: 6px 12px;
+font-size: 14px;
+line-height: 1.42857143;
+color: #555;
+background-color: #fff;
+background-image: none;
+border: 1px solid #ccc;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.input-item-submit{
+	text-shadow: 0 1px 0 #fff;
+background-image: -webkit-linear-gradient(top,#fff 0,#e0e0e0 100%);
+background-image: -o-linear-gradient(top,#fff 0,#e0e0e0 100%);
+background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e0e0e0));
+background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+background-repeat: repeat-x;
+border-color: #dbdbdb;
+border-color: #ccc;
+}
+.input-item-button{
+	text-shadow: 0 1px 0 #fff;
+background-image: -webkit-linear-gradient(top,#fff 0,#e0e0e0 100%);
+background-image: -o-linear-gradient(top,#fff 0,#e0e0e0 100%);
+background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e0e0e0));
+background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+background-repeat: repeat-x;
+border-color: #dbdbdb;
+border-color: #ccc;
+}
+/*.clearfix:after{font-size:0; height:0; visibility:hidden; display:block; content:' '; clear:both}
+.clearfix{display:inline-table; height:1%}
+.clearfix{display:block}*/
+.hand{cursor:pointer}
+.hide{display:none}
+.fl{float:left}
+.fr{float:right}
+#w{width:100%;overflow: hidden;}
+.formtip{font-size: 14px;line-height: 30px;}
+
+.fx-header{height: 68px;border-bottom: 2px solid #e73a36;width: 100%;min-width: 1000px;padding-left: 30px;}
+.fx-logo{display: block;background: url("../images/fx_logo.png") no-repeat;width: 268px;height: 58px;float: left;}
+.fx-header-list{height:40px;float: right;margin-right: 0px;margin-top: 28px;}
+.fx-header-list li{float: left;height: 40px;width:33.33%;font-size: 14px;line-height: 40px;}
+.fx-header-list li a{color: #999;}
+.fx-header-list li a:hover{color: #ff6666;}
+.fx-header-list .curr a{color: #ff6666;}
+
+.fx-container{width: 100%;min-width: 1000px;margin-top: 20px;padding-left: 30px;}
+.bs-docs-sidenav {margin-top: 0;margin-bottom: 0;}
+.fx-sidebar .nav{}
+.nav>li{margin-bottom: 10px;}
+.nav>li>dl{display: none;}
+.nav li a{display: block;padding: 6px 10px;font-size: 14px;font-weight: 500;color: #999;border-left: 2px solid #ffffff;}
+.nav li a:hover{border-left: 2px solid #ff6666;color: #ff6666;background-color: #ffffff;}
+.nav dd a{display: block;padding:4px 25px;font-size: 13px;font-weight: 500;color: #999;border-left: 1px solid #ffffff;}
+.nav dd a:hover{border-left: 1px solid #ff6666;color: #ff6666;}
+.nav>.active>a{border-left: 2px solid #ff6666;color: #ff6666;}
+.nav>.active>dl{display: block;}
+.nav dl .active-min a{border-left: 1px solid #ff6666;color: #ff6666;}
+
+.list{border-bottom:none; margin-bottom:15px;}
+.list tr th{}
+.list tr td{height:42px; border-bottom:1px solid #DDD; padding:8px 0 10px 10px; text-shadow:1px 1px 0 #FFF}
+.list tr td .status-0{color:#D60000;line-height: 42px;}
+.list tr td .status-1{color:#2A9722;line-height: 42px;}
+.list tr td .status-2{color:#999999;line-height: 42px;}
+.list tr td .status-3{color:#FF0000;line-height: 42px;}
+.list tr td .image img{margin-top:3px; cursor:pointer;border: 1px solid #cccccc;}
+.list tr td .image #attachment{width:44px; height:42px; margin:-34px 0 0 2px; overflow:hidden; cursor:pointer; display:block; opacity:0; filter:alpha(opacity=0)}
+.list tr td .article{padding-left:10px}
+.list tr td .title{font-size:14px;}
+.list tr td .title .image{margin:-2px 0 0 3px}
+.list tr td .author{color:#999; margin-top:5px}
+.list tr td .author a, .list tr td .tagitem .null{color:#666}
+.list tr td .author a:hover, .list tr td .tagitem .null:hover{color:#000}
+.list tr td .tagitem{margin-top:5px}
+.list tr td .tagitem em{ margin-right:5px; padding:1px 2px 1px 5px}
+.list tr td .tagitem em a{color:#999; font-family:SimSun; margin-left:3px}
+.list tr td .tagitem em a:hover{color:#D60000}
+.list tr td .tagitem .input-item-submit a{color:#F6F6F6}
+.list tr td .description{margin-right:10px}
+.list tr .article-center{text-align: center;}
+.list tr .article-btn a{font-size: 16px;line-height: 42px;margin-left: 5px;}
+.list tr .category-btn a{font-size: 16px;line-height: 42px;margin-left: 5px;}
+
+.form{width:100%;  border-bottom:none; margin-bottom:15px;}
+.form tr th{font-size:14px; border-top:1px solid #FFF; text-align:left; padding:12px 10px 10px 15px; vertical-align:top; text-shadow:1px 1px 0 #FFF}
+.form tr td{text-align:left; border-top:1px solid #FFF; border-bottom:1px solid #DDD; padding:12px 10px 10px 0; vertical-align:top}
+.form tr td .tips{color:#333; font-size:12px; margin-top:4px; text-shadow:1px 1px 0 #FFF}
+.form tr td .tips em{color:#D60000}
+.form tr td .input-item-text{width:600px}
+.form tr td .input-item-submit, .form tr td .input-item-button, .form tr td .ajax-load-wait{margin-bottom:5px}
+.form tr td .ajax-save-draft{color:#555; background:#FFF7B2; text-shadow:1px 1px 0 #FFF; padding:4px 8px; border-radius:2px}
+.form tr td .index{margin:8px 0 3px 0}
+.form tr td .index label{margin:0 10px 0 3px}
+.form tr td .option-multi-item .input-item-text{margin-top:10px}
+.form tr td #content{margin:0 1px 2px 0}
+
+.form tr td #attach{margin:15px 0 0 0}
+.form tr td #attach .upload-attach-wait, .form tr td #attach #upload-attach-tips{color:#666;line-height: 40px;}
+.form tr td #attach .error, .form tr td #attach .success{background:none; padding:0}
+.form tr td #upload-attach-butn{width:66px; cursor:pointer}
+.form tr td #attach-attach-file{width:66px; height:26px; margin-top: -30px; overflow:hidden; cursor:pointer; opacity:0; filter:alpha(opacity=0)}
+.form tr td #upload-attach-data li{padding:10px 0 6px 0}
+.form tr td #upload-attach-data .inserted a{color:#666}
+.form tr td #upload-attach-data .upload-item-1{background:none}
+.form tr td #upload-attach-data .imageview{width:66px; border-radius:2px}
+.form tr td #upload-attach-data .imageinfo{width:150px; margin-left:15px}
+.form tr td #upload-attach-data .imageinfo h5{font-size:12px; line-height:14px; margin-bottom:7px}
+.option-multi-item li{margin-bottom: 20px;line-height: 25px;width:400px;}
+.option-multi-item li input{margin-right:5px;}
+.option-multi-item li label{font-size: 14px;line-height: 25px;margin-right: 20px;height: 25px;padding-top: 3px;}
+
+#article #title{font-size:14px; width:800px;height: 26px;display: inline;margin:0 7px 3px 0;}
+#article .dropselectbox{line-height:26px}
+#article .dropselectbox h4{height:26px}
+
+#tag li{width:136px; height:28px; line-height:28px; border-top:1px solid #FFF; border-left:1px solid #FFF; border-right:1px solid #CCC; border-bottom:1px solid #CCC; background:#F8F8F8; padding:0 5px; float:left}
+#tag li .fl em{color:#D60000; margin-left:5px}
+#tag li .fr a{color:#888}
+#tag li .fr a:hover{color:#333}
+
+

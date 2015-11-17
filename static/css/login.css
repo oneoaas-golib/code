@@ -1,0 +1,21 @@
+@charset "utf-8";
+/* base style */
+body, h1, h2, h3, h4, h5, h6, div, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0 }
+article, section, aside, hgroup, nav, header, footer, figure,figcaption {display: block;margin:0;padding:0}
+body, button, input, select, textarea { font:13px/1.0  Microsoft YaHei,tahoma, arial, \5b8b\4f53; color:#595757 }
+.b_hide{display: none;}
+.b_block{display: block;}
+/*sign*/
+#sign{height: 100%;width: 100%;}
+.sign-top{height:300px;width: 100%;background:#fff;}
+.sign-top-logo{width:420px;height: 300px;margin:0px auto;}
+.sign-top-logo em{height: 63px;width: 195px;top:195px;background: url("../images/login_logo.png");display: block;position: relative;}
+.sign-form{width: 400px;border: 1px solid #cccccc;border-radius: 5px;margin:-30px auto;background-color: #ffffff;
+	padding-left: 40px;padding-right: 40px;padding-top:15px;padding-bottom: 30px; }
+.sign-form .form-group{margin-top: 25px;}
+.captcha{width: 114px;height: 32px;float: left;}
+#signform .btn{float: right;}
+#error_msg{margin-bottom: 0px;}
+
+#signform .form-group .btn-default{background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+background-repeat: repeat-x;}
