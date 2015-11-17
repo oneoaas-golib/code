@@ -41,14 +41,12 @@ func AddArticle(title, category, content string) error {
 		Content:  content,
 		Updated:  time.Now(),
 	}
-	created, _, err := o.ReadOrCreate(article, "Name")
-	if err != nil {
-		return err
-	}
-	if created {
-		return nil
+	if created, _, err := o.ReadOrCreate(article, "Name"); err == nil {
+		if !created {
+			return errors.New("文章标题已经存在")
+		}
 	} else {
-		return errors.New("文章标题已经存在")
+		return err
 	}
 	//更新分类下面的文章数量
 	cate := &Category{Name: category}

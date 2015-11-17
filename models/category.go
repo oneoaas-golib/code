@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"github.com/astaxie/beego/orm"
 	"time"
 )
@@ -26,7 +27,16 @@ func (this *Category) TableEngine() string {
 }
 
 func AddCategory(name string) error {
-	return nil
+	o := orm.NewOrm()
+	category := &Category{Name: name}
+	if created, _, err := o.ReadOrCreate(category, "Name"); err == nil {
+		if created {
+			return nil
+		} else {
+			return errors.New("分类名称已经存在！")
+		}
+	}
+	return err
 }
 
 func EditCategory(cid, name string) error {
