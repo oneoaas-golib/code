@@ -1,0 +1,42 @@
+<script type="text/javascript">
+    $(function(){
+    $('.bs-docs-sidenav').children('li').eq(1).addClass('active');
+    $('.menu-category-create').addClass('active-min');
+        $('#categoryform').ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function(){
+                if ( $.trim($('#name').val()) === '' ) {
+                    $('#formtip').css("color", "red").html("请输入分类名称!");
+                    return false;
+                }
+                if ( $.trim($('#description').val()) === '' ) {
+                    $('#formtip').css("color", "red").html("请输入分类描述!");
+                    return false;
+                }
+                $('#formtip').removeClass('color').html('');
+                $("#save").attr({"disabled":"disabled"});
+                $("#back").attr({"disabled":"disabled"});
+            },
+            success: function(response) {
+                $("#save").removeAttr("disabled");
+                $("#back").removeAttr("disabled");
+                $('#formtip').css("color", "red").html(response.info).addClass(response.code);
+                var d = dialog({
+                    title: '提示 ： ',
+                    content: response.info
+                });
+                d.showModal();
+                setTimeout(function () {
+                    d.close().remove();
+                }, 2000);
+                if ( response.code === 'success' ) {
+                    $("#save").attr({"disabled":"disabled"});
+                    $("#back").attr({"disabled":"disabled"});
+                    setTimeout(function() {
+                        window.location = "{{ site_url('manager/category') }}";
+                    }, 2200)
+                }
+            }
+        });
+    });
+</script>
