@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>梵响互动 - 后台管理</title>
+    <link href="/static/img/funx.ico" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css?version=2">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.form.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('#name').focus();
+        $('#signform').ajaxForm({
+            dataType: 'json',
+            beforeSubmit: function() {
+                if( $.trim($('#name').val()) == '' ) {
+                    $('#loading').text('请输入邮箱!').show();
+                    $('#loading').show();
+                    $('#name').focus();
+                    return false;
+                }
+                if( $.trim($('#password').val()) == '' ) {
+                    $('#loading').text('请输入密码!').show();
+                    $('#loading').show();
+                    $('#password').focus();
+                    return false;
+                }
+                if( $.trim($('#captcha').val()) == '' ) {
+                    $('#loading').text('请输入验证码!').show();
+                    $('#loading').show();
+                    $('#name').focus();
+                    return false;
+                }
+                $('.input-item-submit').val('登录中');
+            },
+            success: function(response) {
+                $('#loading').text(response.info).addClass(response.code).show();
+                $('#loading').show();
+                $('.input-item-submit').val('登录');
+                if( response.code === 'success' ) {
+                    setTimeout(function() {
+                        window.location = "/manager";
+                    }, 1000);
+                } else {
+                    $('.captcha-img').click();
+                }
+            }
+        });
+    });
+    </script>
+</head>
+<body>
+<div class="sign-container">
+    <div id="sign">
+        <div class="sign-top">
+            <div class="sign-top-logo">
+                <em></em>
+            </div>
+        </div>
+        <div class="sign-form">
+            <form id="signform" class="form-horizontal" role="form" method="post" action="/manager/login">
+                <p id="loading" class="alert alert-warning" style="display:none;"></p>
+                <div class="form-group">
+                    <input type="text" class="input-item-text form-control" name="username"  id="name" placeholder="Email">
+                </div>
+                <div class="form-group">
+                      <input type="password" name="password" class="input-item-text form-control" id="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="captcha form-control" name="captcha" id="captcha" placeholder="验证码" maxlength="4"/>
+                    {{ create_captcha }}
+                    <input type="submit" class="btn btn-default input-item-submit" value="登录">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

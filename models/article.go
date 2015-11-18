@@ -15,6 +15,7 @@ type Article struct {
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
+	State    int8      `orm:"index"`
 	Views    int64     `orm:"index"`
 }
 
@@ -50,7 +51,7 @@ func AddArticle(title, category, content string) error {
 	}
 	//更新分类下面的文章数量
 	cate := &Category{Name: category}
-	err = o.Read(cate, "Name")
+	err := o.Read(cate, "Name")
 	if err != nil {
 		cate.Count++
 		_, err = o.Update(cate, "Count")
@@ -144,9 +145,27 @@ func GetArticle(aid string) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(start, offset string) ([]*Article, error) {
+func GetArticles(start, off string) ([]*Article, error) {
+	limit, err := strconv.ParseInt(start, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	offset, err := strconv.ParseInt(off, 10, 64)
+	if err != nil {
+		return nil, err
+	}
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
-	_, err := o.QueryTable("article").All(&articles)
+	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(limit, offset).All(&articles)
 	return articles, err
 }
+
+//获取文章的总数
+func GetCountAll() (count int64, err error) {
+	o := orm.NewOrm()
+	count, err = o.QueryTable("article").Count()
+	return
+}
+
+/* End of file : article.go */
+/* Location : ./models/article.go */

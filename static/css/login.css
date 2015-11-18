@@ -9,13 +9,12 @@ body, button, input, select, textarea { font:13px/1.0  Microsoft YaHei,tahoma, a
 #sign{height: 100%;width: 100%;}
 .sign-top{height:300px;width: 100%;background:#fff;}
 .sign-top-logo{width:420px;height: 300px;margin:0px auto;}
-.sign-top-logo em{height: 63px;width: 195px;top:195px;background: url("../images/login_logo.png");display: block;position: relative;}
+.sign-top-logo em{height: 63px;width: 195px;top:195px;background: url("../img/login_logo.png");display: block;position: relative;}
 .sign-form{width: 400px;border: 1px solid #cccccc;border-radius: 5px;margin:-30px auto;background-color: #ffffff;
 	padding-left: 40px;padding-right: 40px;padding-top:15px;padding-bottom: 30px; }
 .sign-form .form-group{margin-top: 25px;}
-.captcha{width: 114px;height: 32px;float: left;}
+.captcha{width: 120px;height: 40px;float: left;}
 #signform .btn{float: right;}
 #error_msg{margin-bottom: 0px;}
-
 #signform .form-group .btn-default{background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
 background-repeat: repeat-x;}

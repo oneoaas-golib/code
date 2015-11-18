@@ -5,5 +5,7 @@ type WelcomeController struct {
 }
 
 func (this *WelcomeController) Get() {
-	this.Ctx.WriteString("hello world")
+	this.Data["Title"] = "梵响 - 后台首页"
+	this.Layout = "manager/layout.html"
+	this.TplNames = "manager/index.html"
 }
