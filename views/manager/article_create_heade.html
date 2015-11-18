@@ -1,0 +1,84 @@
+<script type="text/javascript" src="/static/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/static/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="/static/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+var editor;
+$(function() {
+    $('.bs-docs-sidenav').children('li').eq(0).addClass('active');
+    $('.menu-article-create').addClass('active-min');
+    editor = new baidu.editor.ui.Editor({
+        toolbars: [['indent', 'Bold', 'Italic', 'Underline', 'ForeColor', 'Fontfamily', 'Fontsize', 'Insertcode',
+                    'Spechars', 'Date', 'Time','JustifyLeft', 'JustifyCenter', 'Inserttable', 'mergecells',
+                    'JustifyRight', 'InsertOrderedList','InsertUnorderedList', 'Link', 'Unlink', 'RemoveFormat',
+                    'Preview', 'FullScreen', 'Source', 'Undo'
+                    ]],
+        initialFrameHeight: 400,
+        elementPathEnabled: false,
+        maximumWords: 5000
+    });
+    editor.render('content');
+    $('#posted').click(function() {
+        $('#articleform').ajaxSubmit({
+            dataType: 'json',
+            data: { action: 'publish' },
+            beforeSubmit: function() {
+                editor.sync();
+                if ( $.trim($('#title').val()) === '' ) {
+                    $('#formtip').css("color", "red").html("请输入文章标题!");
+                    return false;
+                }
+                if ( !editor.hasContents() ) {
+                    $('#formtip').css("color", "red").html("请输入文章内容!");
+                    return false;
+                }
+                var attach  = $('#upload-attach-data');
+                var lis     = attach.children('li');
+                var insert  = 0;
+                lis.each(function() {
+                    if( $(this).hasClass('inserted') ) {
+                        insert++;
+                    }
+                });
+                if( insert < lis.length ) {
+                    var d = dialog({
+                        title: '提示：',
+                        content: '您还有 ' + (lis.length-insert) + ' 张图片没有插入到文章！',
+                        okValue: '确定',
+                        ok: function () {
+                            return true;
+                        },
+                        cancelValue: '取消',
+                        cancel: function () {}
+                    });
+                    d.showModal();
+                    return false;
+                }
+                $('.ajax-load-wait').show();
+                $("#save").attr({"disabled":"disabled"});
+                $("#back").attr({"disabled":"disabled"});
+            },
+            success: function(response) {
+                $('.ajax-load-wait').hide();
+                $("#save").removeAttr("disabled");
+                $("#back").removeAttr("disabled");
+                $('#formtip').css("color", "red").html(response.info).addClass(response.code);
+                var d = dialog({
+                    title: '提示 ： ',
+                    content: response.info
+                });
+                d.showModal();
+                setTimeout(function () {
+                    d.close().remove();
+                }, 2000);
+                if( response.code == 'success' ) {
+                    $("#save").attr({"disabled":"disabled"});
+                    $("#back").attr({"disabled":"disabled"});
+                    setTimeout(function() {
+                        window.location = "/manager/article";
+                    }, 2200);
+                }
+            }
+        });
+    });
+});
+</script>

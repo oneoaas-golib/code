@@ -5,3 +5,9 @@ type CategoryController struct {
 }
 
 func (this *CategoryController) Get() {}
+
+func (this *CategoryController) Create() {}
+
+func (this *CategoryController) Delete() {}
+
+func (this *CategoryController) Edit() {}
