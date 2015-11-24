@@ -6,12 +6,12 @@ import (
 	"github.com/astaxie/beego"
 )
 
-//文章分类
+//分类的结构体
 type CategoryController struct {
 	BaseController
 }
 
-//文章分类首页
+//显示首页
 func (this *CategoryController) Get() {
 	this.TplNames = "manager/category_index.html"
 	var err error
@@ -20,6 +20,8 @@ func (this *CategoryController) Get() {
 		beego.Error(err)
 	}
 }
+
+//创建分类
 func (this *CategoryController) Create() {
 	if this.Ctx.Input.Method() == "GET" {
 		this.TplNames = "manager/category_create.html"
@@ -51,4 +53,8 @@ func (this *CategoryController) Delete() {
 	}
 }
 
+//修改分类
 func (this *CategoryController) Edit() {}
+
+/* End of file : category.go */
+/* Location : ./controllers/manager/category.go */
