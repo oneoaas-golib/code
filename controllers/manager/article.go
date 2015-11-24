@@ -37,7 +37,8 @@ func (this *ArticleController) Create() {
 	}
 }
 
-func (this *ArticleController) Delete() {}
+func (this *ArticleController) Delete() {
+}
 
 func (this *ArticleController) Edit() {}
 

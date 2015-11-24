@@ -2,13 +2,16 @@ package manager
 
 import (
 	"code/models"
+
 	"github.com/astaxie/beego"
 )
 
+//文章分类
 type CategoryController struct {
 	BaseController
 }
 
+//文章分类首页
 func (this *CategoryController) Get() {
 	this.TplNames = "manager/category_index.html"
 	var err error
@@ -17,7 +20,6 @@ func (this *CategoryController) Get() {
 		beego.Error(err)
 	}
 }
-
 func (this *CategoryController) Create() {
 	if this.Ctx.Input.Method() == "GET" {
 		this.TplNames = "manager/category_create.html"
@@ -42,6 +44,11 @@ func (this *CategoryController) Create() {
 	return
 }
 
-func (this *CategoryController) Delete() {}
+func (this *CategoryController) Delete() {
+	if !this.Ctx.Input.IsAjax() {
+		this.Ctx.WriteString("请求错误")
+		return
+	}
+}
 
 func (this *CategoryController) Edit() {}
