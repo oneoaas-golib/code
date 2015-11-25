@@ -2,7 +2,6 @@ package manager
 
 import (
 	"code/models"
-
 	"github.com/astaxie/beego"
 )
 
