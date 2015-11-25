@@ -9,11 +9,12 @@ import (
 
 //分类的结构体
 type Category struct {
-	Id      int64
-	Name    string `orm:"size(32);unique"`
-	Count   int64
-	Created time.Time `orm:"index;auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"index;auro_now;type(datetime)"`
+	Id          int64
+	Name        string `orm:"size(32);unique"`
+	Description string `orm:"size(32)"`
+	Count       int64
+	Created     time.Time `orm:"index;auto_now_add;type(datetime)"`
+	Updated     time.Time `orm:"index;auro_now;type(datetime)"`
 }
 
 //初始化函数，注册模型
@@ -32,11 +33,12 @@ func (this *Category) TableEngine() string {
 }
 
 //添加分类
-func AddCategory(name string) error {
+func AddCategory(name, desc string) error {
 	o := orm.NewOrm()
 	category := &Category{
-		Name:    name,
-		Updated: time.Now(),
+		Name:        name,
+		Description: desc,
+		Updated:     time.Now(),
 	}
 	created, _, err := o.ReadOrCreate(category, "Name")
 	if err == nil {
@@ -50,7 +52,7 @@ func AddCategory(name string) error {
 }
 
 //修改分类
-func EditCategory(cid, name string) error {
+func EditCategory(cid, name, desc string) error {
 	id, err := strconv.ParseInt(cid, 10, 64)
 	if err != nil {
 		return err
@@ -62,6 +64,7 @@ func EditCategory(cid, name string) error {
 		return err
 	}
 	cate.Name = name
+	cate.Description = desc
 	_, err = o.Update(cate)
 	return err
 
@@ -84,7 +87,6 @@ func DelCategory(cid string) error {
 	}
 	_, err = o.Delete(cate)
 	return err
-
 }
 
 //获取一个分类
@@ -97,13 +99,22 @@ func GetCategory(cid string) (*Category, error) {
 	cate := &Category{Id: id}
 	err = o.Read(cate)
 	return cate, err
-
 }
 
 //获取分类列表
 func GetCategories(start, offset string) ([]*Category, error) {
-	return nil, nil
-
+	s, err := strconv.ParseInt(start, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	l, err := strconv.ParseInt(offset, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	o := orm.NewOrm()
+	categories := make([]*Category, 0)
+	_, err = o.QueryTable("category").Limit(l, s).All(&categories)
+	return categories, err
 }
 
 /* End of file : category.go */

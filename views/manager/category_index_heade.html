@@ -1,0 +1,45 @@
+<script type="text/javascript">
+$(function() {
+    $('.bs-docs-sidenav').children('li').eq(1).addClass('active');
+    $('.menu-category-all').addClass('active-min');
+    var deleteFunction = function(id){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/manager/category/del',
+            data: { id : id },
+            success: function(response)
+            {
+                var d = dialog({
+                    title: '提示 ： ',
+                    content: response.info
+                });
+                d.showModal();
+                setTimeout(function () {
+                    d.close().remove();
+                }, 2000);
+                if ( response.code == 'success' ) {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2200);
+                }
+            }
+        });
+    }
+
+    $('.delete').on('click', function(){
+        var id = $(this).attr('data-id');
+        var d = dialog({
+            title: '提示：',
+            content: '真的要删除这个分类吗！',
+            okValue: '确定',
+            ok: function () {
+                deleteFunction(id);
+            },
+            cancelValue: '取消',
+            cancel: function () {}
+        });
+        d.showModal();
+    });
+});
+</script>

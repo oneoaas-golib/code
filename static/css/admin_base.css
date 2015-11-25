@@ -105,7 +105,7 @@ border-color: #ccc;
 .list tr td .description{margin-right:10px}
 .list tr .article-center{text-align: center;}
 .list tr .article-btn a{font-size: 16px;line-height: 42px;margin-left: 5px;}
-.list tr .category-btn a{font-size: 16px;line-height: 42px;margin-left: 5px;}
+.list tr .category-btn a{font-size: 16px;line-height: 20px;margin-left: 5px;}
 
 .form{width:100%;  border-bottom:none; margin-bottom:15px;}
 .form tr th{font-size:14px; border-top:1px solid #FFF; text-align:left; padding:12px 10px 10px 15px; vertical-align:top; text-shadow:1px 1px 0 #FFF}

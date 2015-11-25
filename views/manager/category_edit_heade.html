@@ -1,0 +1,33 @@
+<script type="text/javascript">
+$(function(){
+    $('#categoryform').ajaxForm({
+        dataType    : 'json',
+        beforeSubmit: function(){
+            if ( $.trim($('#name').val()) === '' ) {
+                $('#formtip').css("color", "red").html("请输入分类名称!");
+                return false;
+            }
+            if ( $.trim($('#description').val()) === '' ) {
+                $('#formtip').css("color", "red").html("请输入分类描述!");
+                return false;
+            }
+            $('#formtip').removeClass('color').html('');
+            $("#save").attr({"disabled":"disabled"});
+            $("#back").attr({"disabled":"disabled"});
+        },
+        success: function(response) {
+            $('#formtip').css("color", "red").html(response.info).addClass(response.code);
+            if ( response.code === 'success' ) {
+                $("#save").attr({"disabled":"disabled"});
+                $("#back").attr({"disabled":"disabled"});
+                setTimeout(function() {
+                    window.location = "/manager/category";
+                }, 2000)
+            } else {
+                $("#save").removeAttr("disabled");
+                $("#back").removeAttr("disabled");
+            }
+        }
+    });
+});
+</script>
