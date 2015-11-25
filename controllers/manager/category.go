@@ -13,7 +13,7 @@ type CategoryController struct {
 //显示首页
 func (this *CategoryController) Get() {
 	var err error
-	this.Data["Categories"], err = models.GetCategories("0", "10")
+	this.Data["Categories"], err = models.GetCategories("1", 10)
 	if err != nil {
 		beego.Error(err)
 	}

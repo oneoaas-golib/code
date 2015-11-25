@@ -15,7 +15,7 @@ type Article struct {
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
-	State    int8      `orm:"index"`
+	State    int       `orm:"index"`
 	Views    int64     `orm:"index"`
 }
 
@@ -34,12 +34,17 @@ func init() {
 }
 
 //添加文章
-func AddArticle(title, category, content string) error {
+func AddArticle(title, category, content, state string) error {
 	o := orm.NewOrm()
+	stat, err := strconv.Atoi(state)
+	if err != nil {
+		return err
+	}
 	article := &Article{
 		Title:    title,
 		Category: category,
 		Content:  content,
+		State:    stat,
 		Updated:  time.Now(),
 	}
 	if created, _, err := o.ReadOrCreate(article, "Name"); err == nil {
@@ -51,7 +56,7 @@ func AddArticle(title, category, content string) error {
 	}
 	//更新分类下面的文章数量
 	cate := &Category{Name: category}
-	err := o.Read(cate, "Name")
+	err = o.Read(cate, "Name")
 	if err != nil {
 		cate.Count++
 		_, err = o.Update(cate, "Count")
@@ -145,18 +150,14 @@ func GetArticle(aid string) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(start, off string) ([]*Article, error) {
-	limit, err := strconv.ParseInt(start, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	offset, err := strconv.ParseInt(off, 10, 64)
+func GetArticles(page string, pagenum int64) ([]*Article, error) {
+	p, err := strconv.ParseInt(page, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
-	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(limit, offset).All(&articles)
+	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(pagenum).Offset((p - 1) * pagenum).All(&articles)
 	return articles, err
 }
 

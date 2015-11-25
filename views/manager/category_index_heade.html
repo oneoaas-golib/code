@@ -4,12 +4,11 @@ $(function() {
     $('.menu-category-all').addClass('active-min');
     var deleteFunction = function(id){
         $.ajax({
-            type: 'POST',
+            type    : 'POST',
             dataType: 'json',
-            url: '/manager/category/del',
-            data: { id : id },
-            success: function(response)
-            {
+            url     : '/manager/category/del',
+            data    : { id : id },
+            success : function(response) {
                 var d = dialog({
                     title: '提示 ： ',
                     content: response.info

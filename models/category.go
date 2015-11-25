@@ -102,18 +102,21 @@ func GetCategory(cid string) (*Category, error) {
 }
 
 //获取分类列表
-func GetCategories(start, offset string) ([]*Category, error) {
-	s, err := strconv.ParseInt(start, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	l, err := strconv.ParseInt(offset, 10, 64)
+func GetCategories(page string, pagenum int64) ([]*Category, error) {
+	p, err := strconv.ParseInt(page, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 	o := orm.NewOrm()
 	categories := make([]*Category, 0)
-	_, err = o.QueryTable("category").Limit(l, s).All(&categories)
+	_, err = o.QueryTable("category").Limit(pagenum).Offset((p - 1) * pagenum).All(&categories)
+	return categories, err
+}
+
+func GetAllCategories() ([]*Category, error) {
+	o := orm.NewOrm()
+	categories := make([]*Category, 0)
+	_, err := o.QueryTable("category").All(&categories)
 	return categories, err
 }
 
