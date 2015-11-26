@@ -17,11 +17,6 @@ type Category struct {
 	Updated     time.Time `orm:"index;auro_now;type(datetime)"`
 }
 
-//初始化函数，注册模型
-func init() {
-	orm.RegisterModel(new(Category))
-}
-
 //设置表名
 func (this *Category) TableName() string {
 	return "category"
@@ -30,6 +25,11 @@ func (this *Category) TableName() string {
 //设置引擎
 func (this *Category) TableEngine() string {
 	return "INNODB"
+}
+
+//初始化函数，注册模型
+func init() {
+	orm.RegisterModel(new(Category))
 }
 
 //添加分类

@@ -18,7 +18,7 @@ func RegisterDB() {
 	orm.RegisterDataBase("default", "mysql", DB_NAME, 30)
 	// register model
 	// create table
-	orm.RunSyncdb("default", true, true)
+	orm.RunSyncdb("default", false, true)
 }
 
 /* End of file : models.go */
