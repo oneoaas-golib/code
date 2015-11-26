@@ -11,7 +11,8 @@ import (
 type Article struct {
 	Id       int64
 	Title    string    `orm:"size(64);unique"`
-	Category string    `orm:"size(32)"`
+	User     *User     `orm:"rel(fk)"`
+	Category *Category `orm:"rel(fk)"`
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
