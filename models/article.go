@@ -65,10 +65,14 @@ func AddArticle(title, category, content, state string) error {
 }
 
 //修改文章
-func EditArticle(tid, title, category, content string) error {
+func EditArticle(tid, title, category, content, state string) error {
 	id, err := strconv.ParseInt(tid, 10, 64)
 	if err != nil {
 		return err
+	}
+	_state, err := strconv.Atoi(state)
+	if err != nil {
+		return nil
 	}
 	o := orm.NewOrm()
 	article := &Article{Id: id}
@@ -80,6 +84,7 @@ func EditArticle(tid, title, category, content string) error {
 		article.Title = title
 		article.Category = category
 		article.Content = content
+		article.State = _state
 		_, err = o.Update(article)
 		if err != nil {
 			return err

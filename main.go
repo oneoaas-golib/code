@@ -16,5 +16,7 @@ func main() {
 	orm.Debug = true
 	beego.SessionOn = true
 	beego.ErrorController(&controllers.ErrorController{})
+	beego.SetStaticPath("/tmp", "tmp")
+	beego.SetStaticPath("/upload", "upload")
 	beego.Run()
 }

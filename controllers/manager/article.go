@@ -3,6 +3,8 @@ package manager
 import (
 	"code/models"
 	"github.com/astaxie/beego"
+	"os"
+	"time"
 )
 
 //文章结构体
@@ -125,6 +127,33 @@ func (this *ArticleController) View() {
 	this.TplNames = "manager/article_view.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/article_view_heade.html"
+	return
+}
+
+func (this *ArticleController) MoveUploadFile() {
+	if !this.Ctx.Input.IsAjax() {
+		this.Ctx.WriteString("请求错误！")
+		return
+	}
+	filename := this.GetString("filename")
+	datePath := time.Now().Format("2006/01")
+	dirPath := "./upload/" + datePath
+	err := os.MkdirAll(dirPath, 0755)
+	if err != nil {
+		beego.Error(err)
+	}
+	err = os.Rename("./tmp/"+filename, dirPath+"/"+filename)
+	if err != nil {
+		this.Data["json"] = map[string]interface{}{"code": "error", "info": err.Error()}
+	} else {
+		this.Data["json"] = map[string]interface{}{
+			"code": "success",
+			"data": map[string]string{
+				"filepath": "/upload/" + datePath + "/" + filename,
+			},
+		}
+	}
+	this.ServeJson()
 	return
 }
 

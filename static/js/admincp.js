@@ -117,7 +117,7 @@ function deleteArticleTag(ele, aid, id) {
  */
 function uploadAttachAction(ele) {
     $(ele).closest('form').ajaxSubmit({
-        url: '/upload/image',
+        url: '/upload',
         dataType: 'json',
         type: 'POST',
         beforeSubmit: function() {
@@ -137,11 +137,11 @@ function uploadAttachAction(ele) {
             if( response.code === 'success' ) {
                 var num = $('#upload-attach-data').find('li').length;
                 var str = '<li class="upload-item-' + (num + 1) + ' clearfix">';
-                    str += '<img src="' + response.data.file_path + '" class="imageview fl" title="' + response.data.file_name + '" />';
+                    str += '<img src="/tmp/' + response.data.filename + '" class="imageview fl" title="' + response.data.filename + '" />';
                     str += '<div class="imageinfo fl">';
-                    str += '<h5>' + response.data.file_name + '</h5>';
-                    str += '<p><a href="javascript:;" data-nums="0" onClick="insertAttachImage(this, \'' + response.data.file_name + '\')">插入到文章</a>';
-                    str += '&nbsp;&nbsp;&nbsp;<a href="javascript:;" onClick="deleteAttachImage(this, \'' + response.data.file_name + '\')">删除</a></p>';
+                    str += '<h5>' + response.data.filename + '</h5>';
+                    str += '<p><a href="javascript:;" data-nums="0" onClick="insertAttachImage(this, \'' + response.data.filename + '\')">插入到文章</a>';
+                    str += '&nbsp;&nbsp;&nbsp;<a href="javascript:;" onClick="deleteAttachImage(this, \'' + response.data.filename + '\')">删除</a></p>';
                     str += '</div>';
                     str += '</li>';
                 $('#upload-attach-data').append(str);
@@ -188,14 +188,14 @@ function insertAttachImage(ele, image) {
 function moveInsertAttachImage(image)
 {
     $.ajax({
-        type: 'POST',
-        url: '/manager/article/moveImageAction',
-        data: { filename: image },
+        type    : 'POST',
+        url     : '/manager/article/move',
+        data    : { filename: image },
         dataType: 'json',
         success: function(response)
         {
             var d = dialog({
-                title: '提示 ： ',
+                title: '提示：',
                 content: response.info
             });
             d.showModal();
@@ -203,7 +203,7 @@ function moveInsertAttachImage(image)
                 d.close().remove();
             }, 2000);
             if ( response.code == 'success' ) {
-                editor.execCommand('insertImage', { src : response.data.file_path });
+                editor.execCommand('insertImage', { src : response.data.filepath });
             }
         }
     });
