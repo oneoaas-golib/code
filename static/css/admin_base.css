@@ -62,7 +62,7 @@ border-color: #ccc;
 .formtip{font-size: 14px;line-height: 30px;}
 
 .fx-header{height: 68px;border-bottom: 2px solid #e73a36;width: 100%;min-width: 1000px;padding-left: 30px;}
-.fx-logo{display: block;background: url("../images/fx_logo.png") no-repeat;width: 268px;height: 58px;float: left;}
+.fx-logo{display: block;background: url("../img/fx_logo.png") no-repeat;width: 268px;height: 58px;float: left;}
 .fx-header-list{height:40px;float: right;margin-right: 0px;margin-top: 28px;}
 .fx-header-list li{float: left;height: 40px;width:33.33%;font-size: 14px;line-height: 40px;}
 .fx-header-list li a{color: #999;}

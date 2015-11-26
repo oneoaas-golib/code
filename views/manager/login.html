@@ -52,30 +52,26 @@
     </script>
 </head>
 <body>
-<div class="sign-container">
-    <div id="sign">
-        <div class="sign-top">
-            <div class="sign-top-logo">
-                <em></em>
+    <div class="sign-container">
+        <div id="sign">
+            <div class="sign-top">
+                <div class="sign-top-logo"> <em></em>
+                </div>
+            </div>
+            <div class="sign-form">
+                <form id="signform" class="form-horizontal" role="form" method="post" action="/manager/login">
+                    <p id="loading" class="alert alert-warning" style="display:none;"></p>
+                    <div class="form-group">
+                        <input type="text" class="input-item-text form-control" name="username"  id="name" placeholder="Email"></div>
+                    <div class="form-group">
+                        <input type="password" name="password" class="input-item-text form-control" id="password" placeholder="Password"></div>
+                    <div class="form-group">
+                        <input type="text" class="captcha form-control" name="captcha" id="captcha" placeholder="验证码" maxlength="4"/>
+                        {{ create_captcha }}
+                        <input type="submit" class="btn btn-default input-item-submit" value="登录"></div>
+                </form>
             </div>
         </div>
-        <div class="sign-form">
-            <form id="signform" class="form-horizontal" role="form" method="post" action="/manager/login">
-                <p id="loading" class="alert alert-warning" style="display:none;"></p>
-                <div class="form-group">
-                    <input type="text" class="input-item-text form-control" name="username"  id="name" placeholder="Email">
-                </div>
-                <div class="form-group">
-                      <input type="password" name="password" class="input-item-text form-control" id="password" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="captcha form-control" name="captcha" id="captcha" placeholder="验证码" maxlength="4"/>
-                    {{ create_captcha }}
-                    <input type="submit" class="btn btn-default input-item-submit" value="登录">
-                </div>
-            </form>
-        </div>
     </div>
-</div>
 </body>
 </html>
