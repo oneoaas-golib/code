@@ -1,8 +1,7 @@
 package models
 
 import (
-	"crypto/md5"
-	"encoding/hex"
+	"code/util"
 	"errors"
 	"github.com/astaxie/beego/orm"
 	"strconv"
@@ -12,11 +11,10 @@ import (
 //用户结构体
 type User struct {
 	Id       int64
-	Articles []*Article `orm:"reverse(many)"`
-	Username string     `orm:"size(32)"`
-	Password string     `orm:"size(64)"`
-	Created  time.Time  `orm:"index;auto_now_add;type(datetime)"`
-	Updated  time.Time  `orm:"index;auto_noe;type(datetime)"`
+	Username string    `orm:"size(32)"`
+	Password string    `orm:"size(64)"`
+	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
+	Updated  time.Time `orm:"index;auto_noe;type(datetime)"`
 }
 
 //设置表名
@@ -37,7 +35,7 @@ func init() {
 //添加初始用户
 func AddAdmin() error {
 	username := "admin@fun-x.cn"
-	password := Str2Md5("admin")
+	password := util.Md5("admin")
 	user := &User{
 		Username: username,
 		Password: password,
@@ -66,7 +64,7 @@ func CheckLogin(username, password string) error {
 		}
 		return err
 	}
-	if Str2Md5(password) != user.Password {
+	if util.Md5(password) != user.Password {
 		return errors.New("用户密码错误！")
 	}
 	return nil
@@ -105,7 +103,7 @@ func EditUser(uid, username, password string) error {
 	if err == nil && user.Id != id {
 		return errors.New("用户名已经存在！")
 	}
-	user.Password = Str2Md5(password)
+	user.Password = util.Md5(password)
 	_, err = o.Update(user)
 	return err
 }
@@ -132,26 +130,15 @@ func GetUser(uid string) (*User, error) {
 	return user, err
 }
 
-func GetUsers(start, off string) ([]*User, error) {
-	limit, err := strconv.ParseInt(start, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	offset, err := strconv.ParseInt(off, 10, 64)
+func GetUsers(page string, pagenum int64) ([]*User, error) {
+	_page, err := strconv.ParseInt(page, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 	o := orm.NewOrm()
 	users := make([]*User, 0)
-	_, err = o.QueryTable("user").Limit(limit, offset).OrderBy("-Created").All(users)
+	_, err = o.QueryTable("user").Limit(pagenum).Offset((_page - 1) * pagenum).OrderBy("-Created").All(users)
 	return users, err
-}
-
-//md5加密
-func Str2Md5(password string) string {
-	md5Ctx := md5.New()
-	md5Ctx.Write([]byte(password))
-	return hex.EncodeToString(md5Ctx.Sum(nil))
 }
 
 /* End of file : user.go */

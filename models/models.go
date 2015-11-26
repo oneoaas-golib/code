@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -19,21 +18,7 @@ func RegisterDB() {
 	orm.RegisterDataBase("default", "mysql", DB_NAME, 30)
 	// register model
 	// create table
-	orm.RunSyncdb("default", false, true)
-}
-
-//自动创建表
-func CreateTable() {
-	//数据库的别名
-	name := "default"
-	//是否删除表之后在创建
-	force := true
-	//打印执行过程
-	verbose := true
-	err := orm.RunSyncdb(name, force, verbose)
-	if err != nil {
-		beego.Error(err)
-	}
+	orm.RunSyncdb("default", true, true)
 }
 
 /* End of file : models.go */

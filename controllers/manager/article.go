@@ -28,11 +28,15 @@ func (this *ArticleController) Get() {
 //创建文章
 func (this *ArticleController) Create() {
 	if this.Ctx.Input.Method() == "GET" {
-		var err error
-		this.Data["Categories"], err = models.GetCategories("1", 10)
+		categories, err := models.GetAllCategories()
 		if err != nil {
 			beego.Error(err)
 		}
+		if categories == nil {
+			this.Redirect("/manager/category/create", 301)
+			return
+		}
+		this.Data["Categories"] = categories
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/article_create.html"
 		this.LayoutSections = make(map[string]string)

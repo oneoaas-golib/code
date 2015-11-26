@@ -10,9 +10,8 @@ import (
 //分类的结构体
 type Category struct {
 	Id          int64
-	Name        string     `orm:"size(32);unique"`
-	Description string     `orm:"size(32)"`
-	Articles    []*Article `orm:"reverse(many)"`
+	Name        string `orm:"size(32);unique"`
+	Description string `orm:"size(32)"`
 	Count       int64
 	Created     time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"index;auro_now;type(datetime)"`

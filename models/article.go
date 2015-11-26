@@ -11,8 +11,7 @@ import (
 type Article struct {
 	Id       int64
 	Title    string    `orm:"size(64);unique"`
-	User     *User     `orm:"rel(fk)"`
-	Category *Category `orm:"rel(fk)"`
+	Category string    `orm:"size(32)"`
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
@@ -167,6 +166,40 @@ func GetCountAll() (count int64, err error) {
 	o := orm.NewOrm()
 	count, err = o.QueryTable("article").Count()
 	return
+}
+
+//移动到回收站
+func RemoveToRecycle(aid string) error {
+	id, err := strconv.ParseInt(aid, 10, 64)
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	article := Article{Id: id}
+	err = o.Read(&article)
+	if err != nil {
+		return err
+	}
+	article.State = 0
+	_, err = o.Update(article)
+	return err
+}
+
+//从回收站恢复
+func RecoveryFromRecycle(aid string) error {
+	id, err := strconv.ParseInt(aid, 10, 64)
+	if err != nil {
+		return err
+	}
+	o := orm.NewOrm()
+	article := Article{Id: id}
+	err = o.Read(&article)
+	if err != nil {
+		return err
+	}
+	article.State = 1
+	_, err = o.Update(article)
+	return err
 }
 
 /* End of file : article.go */
