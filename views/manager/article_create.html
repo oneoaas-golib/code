@@ -1,4 +1,4 @@
-<form id="articleform" method="post" action="/manager/article/create" >
+<form id="articleform" method="post" action="/manager/article/create">
     <table border="0" cellpadding="0" cellspacing="0" class="form">
         <tr>
             <th>标题</th>
@@ -9,7 +9,7 @@
         <tr>
             <th>分类</th>
             <td>
-                <select id="cid" name="cid">
+                <select id="category" name="category">
                     {{ range .Categories }}
                     <option value="{{ .Name }}">{{ .Name }}</option>
                     {{ end }}
@@ -20,15 +20,15 @@
             <th>内容</th>
             <td width="95%">
                 <div id="article-editormd">
-                    <textarea style="display:none;" name="content"></textarea>
+                    <textarea style="display:none;" id="content" name="content"></textarea>
                 </div>
             </td>
         </tr>
         <tr>
             <th>完成</th>
             <td>
-                <input type="button" value="发布" id="posted" class="input-item-submit btn btn-default btn-xs" />
-                <input type="button" value="返回" class="input-item-button btn btn-default btn-xs" onClick="history.back()" />
+                <input type="submit" value="发布" id="save" class="input-item-submit btn btn-default btn-xs" />
+                <input type="button" value="返回" id="back" class="input-item-button btn btn-default btn-xs" onClick="history.back()" />
                 <span id="formtip"></span>
             </td>
         </tr>

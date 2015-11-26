@@ -15,7 +15,7 @@ type Article struct {
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
-	State    int       `orm:"index"`
+	State    int       `orm:"index;default(1)"`
 	Views    int64     `orm:"index"`
 }
 
@@ -34,20 +34,15 @@ func init() {
 }
 
 //添加文章
-func AddArticle(title, category, content, state string) error {
+func AddArticle(title, category, content string) error {
 	o := orm.NewOrm()
-	stat, err := strconv.Atoi(state)
-	if err != nil {
-		return err
-	}
 	article := &Article{
 		Title:    title,
 		Category: category,
 		Content:  content,
-		State:    stat,
 		Updated:  time.Now(),
 	}
-	if created, _, err := o.ReadOrCreate(article, "Name"); err == nil {
+	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
 		if !created {
 			return errors.New("文章标题已经存在")
 		}
@@ -56,7 +51,7 @@ func AddArticle(title, category, content, state string) error {
 	}
 	//更新分类下面的文章数量
 	cate := &Category{Name: category}
-	err = o.Read(cate, "Name")
+	err := o.Read(cate, "Name")
 	if err != nil {
 		cate.Count++
 		_, err = o.Update(cate, "Count")

@@ -43,13 +43,12 @@ func (this *ArticleController) Create() {
 	title := this.GetString("title")
 	category := this.GetString("category")
 	content := this.GetString("content")
-	state := this.GetString("state")
-	if title == "" || category == "" || content == "" || state == "" {
+	if title == "" || category == "" || content == "" {
 		this.Data["json"] = map[string]string{"code": "error", "info": "必填选项不能为空！"}
 		this.ServeJson()
 		return
 	}
-	err := models.AddArticle(title, category, content, state)
+	err := models.AddArticle(title, category, content)
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
