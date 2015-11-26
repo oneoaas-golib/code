@@ -1,6 +1,7 @@
 package main
 
 import (
+	"code/controllers"
 	"code/models"
 	_ "code/routers"
 	"github.com/astaxie/beego"
@@ -14,5 +15,8 @@ func init() {
 func main() {
 	orm.Debug = true
 	beego.SessionOn = true
+	beego.ErrorController(&controllers.ErrorController{})
+	beego.SetStaticPath("/tmp", "tmp")
+	beego.SetStaticPath("/upload", "upload")
 	beego.Run()
 }

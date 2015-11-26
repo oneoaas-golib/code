@@ -7,7 +7,7 @@ import (
 )
 
 //数据库的链接
-const DB_NAME = "root:tian0912@/beego?charset=utf8"
+const DB_NAME = "ruoli:ruoli@/beego?charset=utf8"
 
 //初始化数据库
 func RegisterDB() {

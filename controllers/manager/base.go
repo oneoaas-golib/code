@@ -14,3 +14,6 @@ func (this *BaseController) Prepare() {
 	// 	return
 	// }
 }
+
+/* End of file : base.go */
+/* Location : ./controllers/manager/base.go */

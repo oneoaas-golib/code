@@ -1,0 +1,38 @@
+<table border="0" cellpadding="0" cellspacing="0" class="list table table-striped">
+    <tr>
+        <th width="5%">ID</th>
+        <th width="20%">分类名称</th>
+        <th width="45%">描述</th>
+        <th width="20%">文章数量</th>
+        <th width="10%">操作</th>
+    </tr>
+    {{ if .Categories }}
+    {{ range .Categories }}
+    <tr>
+        <td valign="top">{{ .Id }}</td>
+        <td>
+            <p class="title">{{ .Name }}</p>
+        </td>
+        <td>
+            <p class="title">{{ .Description }}</p>
+        </td>
+        <td>
+            <p class="title">{{ .Count }}</p>
+        </td>
+        <td class="category-btn">
+            <a href="/manager/category/edit/{{ .Id }}" class="update glyphicon glyphicon-pencil"></a>
+            &nbsp;&nbsp;
+            <a href="javascript:;" data-id="{{ .Id }}" class="delete glyphicon glyphicon-remove"></a>
+        </td>
+    </tr>
+    {{ end }}
+    {{ else }}
+    <tr>
+        <td colspan="4" class="null">
+            还没有分类，赶快去
+            <a href="/manager/category/create">添加分类</a>
+            吧！
+        </td>
+    </tr>
+    {{ end }}
+</table>

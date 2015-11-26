@@ -11,11 +11,12 @@ import (
 type Article struct {
 	Id       int64
 	Title    string    `orm:"size(64);unique"`
-	Category string    `orm:"size(32)"`
+	User     *User     `orm:"rel(fk)"`
+	Category *Category `orm:"rel(fk)"`
 	Content  string    `orm:"size(5000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
-	State    int8      `orm:"index"`
+	State    int       `orm:"index;default(1)"`
 	Views    int64     `orm:"index"`
 }
 
@@ -42,7 +43,7 @@ func AddArticle(title, category, content string) error {
 		Content:  content,
 		Updated:  time.Now(),
 	}
-	if created, _, err := o.ReadOrCreate(article, "Name"); err == nil {
+	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
 		if !created {
 			return errors.New("文章标题已经存在")
 		}
@@ -60,10 +61,14 @@ func AddArticle(title, category, content string) error {
 }
 
 //修改文章
-func EditArticle(tid, title, category, content string) error {
+func EditArticle(tid, title, category, content, state string) error {
 	id, err := strconv.ParseInt(tid, 10, 64)
 	if err != nil {
 		return err
+	}
+	_state, err := strconv.Atoi(state)
+	if err != nil {
+		return nil
 	}
 	o := orm.NewOrm()
 	article := &Article{Id: id}
@@ -75,6 +80,7 @@ func EditArticle(tid, title, category, content string) error {
 		article.Title = title
 		article.Category = category
 		article.Content = content
+		article.State = _state
 		_, err = o.Update(article)
 		if err != nil {
 			return err
@@ -145,18 +151,14 @@ func GetArticle(aid string) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(start, off string) ([]*Article, error) {
-	limit, err := strconv.ParseInt(start, 10, 64)
-	if err != nil {
-		return nil, err
-	}
-	offset, err := strconv.ParseInt(off, 10, 64)
+func GetArticles(page string, pagenum int64) ([]*Article, error) {
+	p, err := strconv.ParseInt(page, 10, 64)
 	if err != nil {
 		return nil, err
 	}
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
-	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(limit, offset).All(&articles)
+	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(pagenum).Offset((p - 1) * pagenum).All(&articles)
 	return articles, err
 }
 

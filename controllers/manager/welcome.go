@@ -1,5 +1,7 @@
 package manager
 
+import ()
+
 type WelcomeController struct {
 	BaseController
 }
