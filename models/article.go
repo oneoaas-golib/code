@@ -88,19 +88,20 @@ func DelArticle(id int64) error {
 	article := &Article{Id: id}
 	var oldCategory string
 	err := o.Read(article)
-	if err == nil {
-		oldCategory = article.Category
-		_, err = o.Delete(article)
-		if err != nil {
-			return err
-		}
+	if err != nil {
+		return err
+	}
+	oldCategory = article.Category
+	_, err = o.Delete(article)
+	if err != nil {
+		return err
 	}
 
 	if len(oldCategory) > 0 {
 		cate := new(Category)
-		err = o.QueryTable("category").Filter("name", oldCategory).One(cate)
+		err = o.QueryTable("category").Filter("Name", oldCategory).One(cate)
 		if err != nil {
-			return err
+
 		}
 		cate.Count--
 		_, err = o.Update(cate)
@@ -112,13 +113,13 @@ func DelArticle(id int64) error {
 func GetArticle(id int64) (*Article, error) {
 	article := &Article{Id: id}
 	o := orm.NewOrm()
-	err := o.Read(article)
-	if err != nil {
+	if err := o.Read(article); err == nil {
+		article.Views++
+		_, err = o.Update(article)
+		return article, err
+	} else {
 		return nil, err
 	}
-	article.Views++
-	_, err = o.Update(article)
-	return article, err
 }
 
 //获取文章列表
@@ -139,27 +140,27 @@ func GetArticleCount() (count int64, err error) {
 //移动到回收站
 func RemoveToTrash(id int64) error {
 	o := orm.NewOrm()
-	article := Article{Id: id}
-	err := o.Read(&article)
-	if err != nil {
+	article := &Article{Id: id}
+	if err := o.Read(article); err == nil {
+		article.State = 0
+		_, err = o.Update(article)
+		return err
+	} else {
 		return err
 	}
-	article.State = 0
-	_, err = o.Update(article)
-	return err
 }
 
 //从回收站恢复
 func ReturnFromTrash(id int64) error {
 	o := orm.NewOrm()
-	article := Article{Id: id}
-	err := o.Read(&article)
-	if err != nil {
+	article := &Article{Id: id}
+	if err := o.Read(&article); err == nil {
+		article.State = 1
+		_, err = o.Update(article)
+		return err
+	} else {
 		return err
 	}
-	article.State = 1
-	_, err = o.Update(article)
-	return err
 }
 
 /* End of file : article.go */

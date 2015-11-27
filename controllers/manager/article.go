@@ -34,6 +34,7 @@ func (this *ArticleController) Get() {
 	this.TplNames = "manager/article_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/article_index_heade.html"
+	this.LayoutSections["Pagination"] = "manager/pagination.html"
 	return
 }
 

@@ -31,7 +31,8 @@ $(function() {
         });
     }
     $('.delete').on('click', function() {
-        var id = $(this).attr('data-id');
+        var id = $(this).data("id")
+        console.log(id);
         var d = dialog({
             title: '提示：',
             content: '真的要删除这篇文章吗！',

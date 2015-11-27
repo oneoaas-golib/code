@@ -13,7 +13,7 @@ type User struct {
 	Username string    `orm:"size(32)"`
 	Password string    `orm:"size(64)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
-	Updated  time.Time `orm:"index;auto_noe;type(datetime)"`
+	Login    time.Time `orm:"index;auto_noe;type(datetime)"`
 }
 
 //添加初始用户
@@ -23,7 +23,7 @@ func AddAdmin() error {
 	user := &User{
 		Username: username,
 		Password: password,
-		Updated:  time.Now(),
+		Login:    time.Now(),
 	}
 	o := orm.NewOrm()
 	created, _, err := o.ReadOrCreate(user, "Username")

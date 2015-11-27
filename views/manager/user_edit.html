@@ -1,17 +1,10 @@
-<form id="usereditform" method="post" action="{{ site_url('manager/user/updateAction') }}">
+<form id="usereditform" method="post" action="/manager/user/edit">
     <table border="0" cellpadding="0" cellspacing="0" class="form">
         <tr>
             <th width="100px">电子邮件</th>
             <td widht="*">
-                <input type="text" id="email" name="email" class="input-item-text" maxlength="64" value="{{ user.email }}" />
+                <input type="text" id="email" name="email" class="input-item-text" maxlength="64" value="{{ .User.Username }}" />
                 <p class="tips">该用户的电子邮件，请保证该邮件可以正常使用，将用以发布通知</p>
-            </td>
-        </tr>
-        <tr>
-            <th>真实姓名</th>
-            <td>
-                <input type="text" id="name" name="name" class="input-item-text" maxlength="4" value="{{ user.name }}" />
-                <p class="tips">用户姓名可以由汉字组成，长度保持 2-4 个字符</p>
             </td>
         </tr>
         <tr>
@@ -31,29 +24,22 @@
             </td>
         </tr>
         <tr>
-            <th>简单介绍</th>
-            <td>
-                <input type="text" id="description" name="description" class="input-item-text" maxlength="64" value="{{ user.description }}" />
-                <p class="tips">该用户简单介绍</p>
-            </td>
-        </tr>
-        <tr>
             <th>用户状态</th>
             <td>
-                <input type="radio" id="state1" name="state" value="1" {% if user.state==1 %} checked {% endif %} />
+                <input type="radio" id="state1" name="state" value="1" {{ if eq .User.State 1 }} checked {{ end }} />
                 <label for="state1">正常</label>
                 &nbsp;&nbsp;
-                <input type="radio" id="state0" name="state" value="0" {% if user.state==0 %} checked {% endif %}/>
+                <input type="radio" id="state0" name="state" value="0" {{ if eq .User.State 0 }} checked {{ end }}/>
                 <label for="state0">冻结</label>
             </td>
         </tr>
         <tr>
             <th>完成</th>
             <td>
-                <input type="hidden" name="id" value="{{ user.id }}" />
+                <input type="hidden" name="id" value="{{ .User.Id }}" />
                 <input id="save" type="submit" value="立即保存" class="input-item-submit btn btn-default btn-xs" /> &nbsp;&nbsp;
                 <input id="back" type="button" value="返回" class="input-item-button btn btn-default btn-xs" onClick="history.back()" /> &nbsp;&nbsp;
-                <img src="{{ base_url('static/images/ajaxing.gif') }}" class="ajax-load-wait hide" title="loading..." />
+                <img src="static/img/ajaxing.gif" class="ajax-load-wait hide" title="loading..." />
                 <span id="formtip"></span>
             </td>
         </tr>

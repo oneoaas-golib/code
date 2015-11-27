@@ -33,6 +33,7 @@ func (this *UserController) Get() {
 	this.TplNames = "manager/user_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/user_index_heade.html"
+	this.LayoutSections["Pagination"] = "manager/pagination.html"
 	if err != nil {
 		beego.Error(err)
 	}
