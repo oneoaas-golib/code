@@ -45,6 +45,8 @@ func (this *LoginController) Get() {
 
 //处理提交的请求
 func (this *LoginController) Post() {
+	this.IsAjax()
+
 	//先判断验证码是否正确
 	if !capt.VerifyReq(this.Ctx.Request) {
 		this.Data["json"] = map[string]string{"code": "error", "info": "验证码错误！"}

@@ -3,6 +3,7 @@ package manager
 import (
 	"code/models"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/utils/pagination"
 )
 
 //分类的结构体
@@ -12,11 +13,21 @@ type CategoryController struct {
 
 //显示首页
 func (this *CategoryController) Get() {
-	var err error
-	this.Data["Categories"], err = models.GetCategories("1", 10)
+	pageSize, err := beego.AppConfig.Int("pagesize")
 	if err != nil {
 		beego.Error(err)
 	}
+	count, err := models.GetCategoryCount()
+	if err != nil {
+		beego.Error(err)
+	}
+	paginator := pagination.NewPaginator(this.Ctx.Request, pageSize, count)
+	this.Data["paginator"] = paginator
+	this.Data["Categories"], err = models.GetCategories(paginator.Offset(), pageSize)
+	if err != nil {
+		beego.Error(err)
+	}
+
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/category_index.html"
 	this.LayoutSections = make(map[string]string)
@@ -53,10 +64,8 @@ func (this *CategoryController) Create() {
 
 //删除分类
 func (this *CategoryController) Delete() {
-	if !this.Ctx.Input.IsAjax() {
-		this.Ctx.WriteString("请求错误")
-		return
-	}
+	this.IsAjax()
+
 	id := this.GetString("id")
 	if id == "" {
 		this.Data["json"] = map[string]string{"code": "error", "info": "必填选项不能为空！"}

@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+//上传文件的控制器
 type UploadController struct {
 	beego.Controller
 }
@@ -34,7 +35,7 @@ func (this *UploadController) Post() {
 	nano := time.Now().UnixNano()
 	rand.Seed(nano)
 	randNum := rand.Int63()
-	fileName := strconv.FormatInt(randNum, 10) + util.RandStringRunes(8) + filepath.Ext(fileheader.Filename)
+	fileName := strconv.FormatInt(randNum, 10) + util.RandStringRunes(16) + filepath.Ext(fileheader.Filename)
 	//保存文件
 	err = this.SaveToFile("editormd-image-file", dirPath+"/"+fileName)
 	if err != nil {
@@ -49,3 +50,6 @@ func (this *UploadController) Post() {
 	this.ServeJson()
 	return
 }
+
+/* End of file 	: upload.go */
+/* Location 	:  ./controllers/upload.go */

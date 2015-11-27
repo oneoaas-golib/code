@@ -4,9 +4,7 @@ import (
 	"code/models"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/utils/pagination"
-	"os"
 	"strconv"
-	"time"
 )
 
 // 文章结构体
@@ -17,7 +15,10 @@ type ArticleController struct {
 // 显示文章首页
 func (this *ArticleController) Get() {
 	// 处理分页
-	pageSize := 20
+	pageSize, err := beego.AppConfig.Int("pagesize")
+	if err != nil {
+		beego.Error(err)
+	}
 	count, err := models.GetArticleCount()
 	if err != nil {
 		beego.Error(err)
@@ -33,6 +34,7 @@ func (this *ArticleController) Get() {
 	this.TplNames = "manager/article_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/article_index_heade.html"
+	return
 }
 
 // 创建文章
@@ -70,10 +72,7 @@ func (this *ArticleController) Create() {
 
 // 删除文章
 func (this *ArticleController) Delete() {
-	if !this.Ctx.Input.IsAjax() {
-		this.Ctx.WriteString("请求错误！")
-		return
-	}
+	this.IsAjax()
 
 	id, err := this.GetInt64("id")
 	if err != nil {
@@ -157,37 +156,43 @@ func (this *ArticleController) View() {
 	return
 }
 
-// 移动上传的文件
-func (this *ArticleController) MoveUploadFile() {
-	if !this.Ctx.Input.IsAjax() {
-		this.Ctx.WriteString("请求错误！")
-		return
-	}
-	filename := this.GetString("filename")
-	datePath := time.Now().Format("2006/01")
-	dirPath := "./upload/" + datePath
-	err := os.MkdirAll(dirPath, 0755)
+// 移动到回收站
+func (this *ArticleController) RemoveToTrash() {
+	this.IsAjax()
+
+	id, err := this.GetInt64("id")
 	if err != nil {
 		beego.Error(err)
 	}
-	err = os.Rename("./tmp/"+filename, dirPath+"/"+filename)
+
+	err = models.RemoveToTrash(id)
 	if err != nil {
-		this.Data["json"] = map[string]interface{}{"code": "error", "info": err.Error()}
+		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
-		this.Data["json"] = map[string]interface{}{
-			"code": "success",
-			"data": map[string]string{
-				"filepath": "/upload/" + datePath + "/" + filename,
-			},
-		}
+		this.Data["json"] = map[string]string{"code": "success"}
 	}
 	this.ServeJson()
 	return
 }
 
-func (this *ArticleController) RemoveToTrash() {}
+//从回收站恢复
+func (this *ArticleController) ReturnFromTrash() {
+	this.IsAjax()
 
-func (this *ArticleController) ReturnFromTrash() {}
+	id, err := this.GetInt64("id")
+	if err != nil {
+		beego.Error(err)
+	}
+
+	err = models.ReturnFromTrash(id)
+	if err != nil {
+		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
+	} else {
+		this.Data["json"] = map[string]string{"code": "success"}
+	}
+	this.ServeJson()
+	return
+}
 
 /* End of file : article.go */
 /* Location : ./controllers/manager/article.go */

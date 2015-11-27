@@ -15,14 +15,8 @@ func init() {
 
 //初始化数据库
 func RegisterDB() {
-	// register driver
-	// mysql sqlite2 postgres 这三种是已经注册过的，可以不用设置
 	orm.RegisterDriver("mysql", orm.DR_MySQL)
-	// set default database
-	// 必须注册一个别名为 default 的数据库，作为默认使用
 	orm.RegisterDataBase("default", "mysql", DB_NAME, 30)
-	// register model
-	// create table
 	orm.RunSyncdb("default", false, true)
 }
 

@@ -4,7 +4,6 @@ import (
 	"code/util"
 	"errors"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"time"
 )
 
@@ -74,14 +73,10 @@ func AddUser(username, password string) error {
 }
 
 //修改用户
-func EditUser(uid, username, password string) error {
-	id, err := strconv.ParseInt(uid, 10, 64)
-	if err != nil {
-		return err
-	}
+func EditUser(id int64, username, password string) error {
 	user := &User{Id: id}
 	o := orm.NewOrm()
-	err = o.Read(user)
+	err := o.Read(user)
 	if err != nil {
 		return err
 	}
@@ -96,40 +91,35 @@ func EditUser(uid, username, password string) error {
 }
 
 //删除用户
-func DelUser(uid string) error {
-	id, err := strconv.ParseInt(uid, 10, 64)
-	if err != nil {
-		return err
-	}
+func DelUser(id int64) error {
 	o := orm.NewOrm()
 	user := &User{Id: id}
-	_, err = o.Delete(user)
+	_, err := o.Delete(user)
 	return err
 }
 
 //获取用户
-func GetUser(uid string) (*User, error) {
-	id, err := strconv.ParseInt(uid, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetUser(id int64) (*User, error) {
 	o := orm.NewOrm()
 	user := &User{Id: id}
-	err = o.Read(user)
+	err := o.Read(user)
 	return user, err
 }
 
 //获取用户列表
-func GetUsers(page string, pagenum int64) ([]*User, error) {
-	_page, err := strconv.ParseInt(page, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetUsers(offset, pagesize int) ([]*User, error) {
 	o := orm.NewOrm()
 	users := make([]*User, 0)
-	_, err = o.QueryTable("user").Limit(pagenum).Offset((_page - 1) * pagenum).OrderBy("-Created").All(users)
+	_, err := o.QueryTable("user").Limit(pagesize).Offset(offset).OrderBy("-Created").All(users)
 	return users, err
 }
 
-/* End of file : user.go */
-/* Location : ./models/user.go */
+// 获取用户的数量
+func GetUserCount() (int64, error) {
+	o := orm.NewOrm()
+	count, err := o.QueryTable("user").Count()
+	return count, err
+}
+
+/* End of file 	: user.go */
+/* Location 	: ./models/user.go */

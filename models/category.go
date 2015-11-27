@@ -87,14 +87,10 @@ func GetCategory(cid string) (*Category, error) {
 }
 
 //获取分类列表
-func GetCategories(page string, pagenum int64) ([]*Category, error) {
-	p, err := strconv.ParseInt(page, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetCategories(offset, pagesize int) ([]*Category, error) {
 	o := orm.NewOrm()
 	categories := make([]*Category, 0)
-	_, err = o.QueryTable("category").Limit(pagenum).Offset((p - 1) * pagenum).All(&categories)
+	_, err := o.QueryTable("category").Limit(pagesize).Offset(offset).All(&categories)
 	return categories, err
 }
 
@@ -104,6 +100,13 @@ func GetAllCategories() ([]*Category, error) {
 	categories := make([]*Category, 0)
 	_, err := o.QueryTable("category").All(&categories)
 	return categories, err
+}
+
+//获取分类个数
+func GetCategoryCount() (int64, error) {
+	o := orm.NewOrm()
+	count, err := o.QueryTable("category").Count()
+	return count, err
 }
 
 /* End of file : category.go */
