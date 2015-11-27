@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="robots" content="noindex, nofollow" />
@@ -10,24 +11,24 @@
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.form.js"></script>
     <script type="text/javascript">
-    $(function(){
+    $(function() {
         $('#name').focus();
         $('#signform').ajaxForm({
             dataType: 'json',
             beforeSubmit: function() {
-                if( $.trim($('#name').val()) == '' ) {
+                if ($.trim($('#name').val()) == '') {
                     $('#loading').text('请输入邮箱!').show();
                     $('#loading').show();
                     $('#name').focus();
                     return false;
                 }
-                if( $.trim($('#password').val()) == '' ) {
+                if ($.trim($('#password').val()) == '') {
                     $('#loading').text('请输入密码!').show();
                     $('#loading').show();
                     $('#password').focus();
                     return false;
                 }
-                if( $.trim($('#captcha').val()) == '' ) {
+                if ($.trim($('#captcha').val()) == '') {
                     $('#loading').text('请输入验证码!').show();
                     $('#loading').show();
                     $('#name').focus();
@@ -39,7 +40,7 @@
                 $('#loading').text(response.info).addClass(response.code).show();
                 $('#loading').show();
                 $('.input-item-submit').val('登录');
-                if( response.code === 'success' ) {
+                if (response.code === 'success') {
                     setTimeout(function() {
                         window.location = "/manager";
                     }, 1000);
@@ -51,6 +52,7 @@
     });
     </script>
 </head>
+
 <body>
     <div class="sign-container">
         <div id="sign">
@@ -62,16 +64,19 @@
                 <form id="signform" class="form-horizontal" role="form" method="post" action="/manager/login">
                     <p id="loading" class="alert alert-warning" style="display:none;"></p>
                     <div class="form-group">
-                        <input type="text" class="input-item-text form-control" name="username"  id="name" placeholder="Email"></div>
+                        <input type="text" class="input-item-text form-control" name="username" id="name" placeholder="Email">
+                    </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="input-item-text form-control" id="password" placeholder="Password"></div>
+                        <input type="password" name="password" class="input-item-text form-control" id="password" placeholder="Password">
+                    </div>
                     <div class="form-group">
-                        <input type="text" class="captcha form-control" name="captcha" id="captcha" placeholder="验证码" maxlength="4"/>
-                        {{ create_captcha }}
-                        <input type="submit" class="btn btn-default input-item-submit" value="登录"></div>
+                        <input type="text" class="captcha form-control" name="captcha" id="captcha" placeholder="验证码" maxlength="4" /> {{ create_captcha }}
+                        <input type="submit" class="btn btn-default input-item-submit" value="登录">
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </body>
+
 </html>

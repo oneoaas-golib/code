@@ -6,7 +6,7 @@ import (
 )
 
 //数据库的链接
-const DB_NAME = "ruoli:ruoli@/beego?charset=utf8"
+const DB_NAME = "ruoli:ruoli@/beego?charset=utf8&loc=Local"
 
 //注册模型
 func init() {

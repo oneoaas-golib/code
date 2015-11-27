@@ -1,0 +1,37 @@
+<table border="0" cellpadding="0" cellspacing="0" class="list table table-striped">
+    <tr>
+        <th width="5%">ID</th>
+        <th width="30%">用户名</th>
+        <th width="20%">注册时间</th>
+        <th width="20%">最后登录</th>
+        <th width="10%">状态</th>
+        <th width="15%">操作</th>
+    </tr>
+    {% if list %} {% for value in list %}
+    <tr>
+        <td>{{ value.id }}</td>
+        <td>
+            <p class="title">{{ value.name }}</p>
+            <p class="author">{{ value.email }}</p>
+        </td>
+        <td>{{ date('Y/m/d H:i', value.regtime) }}</td>
+        <td>{{ date('Y/m/d H:i', value.lastime) }}</td>
+        <td>
+            {% if value.state == 0 %}
+            <span class="status-0">已冻结</span> {% elseif value.state == 1 %}
+            <span class="status-1">正常</span> {% endif %}
+        </td>
+        <td>
+            <a href="{{ site_url(['manager', 'user', 'update', value.id]) }}" class="update">编辑</a> -
+            <a href="{{ site_url(['manager', 'user', 'delete', value.id]) }}" class="delete">删除</a>
+        </td>
+    </tr>
+    {% endfor %} {% else %}
+    <tr>
+        <td colspan="6" class="null">
+            还没有用户，赶快去
+            <a href="{{ site_url('manager/user/create') }}">创建用户</a> 吧！
+        </td>
+    </tr>
+    {% endif %}
+</table>

@@ -6,8 +6,7 @@
         <th width="20%">文章数量</th>
         <th width="10%">操作</th>
     </tr>
-    {{ if .Categories }}
-    {{ range .Categories }}
+    {{ if .Categories }} {{ range .Categories }}
     <tr>
         <td valign="top">{{ .Id }}</td>
         <td>
@@ -25,13 +24,11 @@
             <a href="javascript:;" data-id="{{ .Id }}" class="delete glyphicon glyphicon-remove"></a>
         </td>
     </tr>
-    {{ end }}
-    {{ else }}
+    {{ end }} {{ else }}
     <tr>
         <td colspan="4" class="null">
             还没有分类，赶快去
-            <a href="/manager/category/create">添加分类</a>
-            吧！
+            <a href="/manager/category/create">添加分类</a> 吧！
         </td>
     </tr>
     {{ end }}
@@ -54,27 +51,25 @@
         <li class="disabled">
             <a>&laquo;</a>
         </li>
-        {{end}}
-         {{range $index, $page := .paginator.Pages}}
-        <li{{if $.paginator.IsActive .}} class="active"{{end}}>
+        {{end}} {{range $index, $page := .paginator.Pages}}
+        <li{{if $.paginator.IsActive .}} class="active" {{end}}>
             <a href="{{$.paginator.PageLink $page}}">{{$page}}</a>
-        </li>
-        {{end}}
-         {{if .paginator.HasNext}}
-        <li>
-            <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
-        </li>
-        <li>
-            <a href="{{.paginator.PageLinkLast}}">{{ .paginator.last_page }}</a>
-        </li>
-        {{else}}
-        <li class="disabled">
-            <a>&raquo;</a>
-        </li>
-        <li class="disabled">
-            <a>{{ .paginator.last_page }}</a>
-        </li>
-        {{end}}
+            </li>
+            {{end}} {{if .paginator.HasNext}}
+            <li>
+                <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
+            </li>
+            <li>
+                <a href="{{.paginator.PageLinkLast}}">{{ .paginator.last_page }}</a>
+            </li>
+            {{else}}
+            <li class="disabled">
+                <a>&raquo;</a>
+            </li>
+            <li class="disabled">
+                <a>{{ .paginator.last_page }}</a>
+            </li>
+            {{end}}
     </ul>
     {{end}}
 </div>

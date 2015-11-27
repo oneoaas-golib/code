@@ -1,17 +1,16 @@
-<form id="editform" method="post" action="/manager/article/edit">
+<form id="articleeditform" method="post" action="/manager/article/edit">
     <table border="0" cellpadding="0" cellspacing="0" class="form">
         <tr>
             <th>标题</th>
             <td>
-                <input type="text" id="title" name="title" value="{{ .Article.Title }}" class="form-group-sm form-control" maxlength="64" placeholder="请输入文章标题"/>
+                <input type="text" id="title" name="title" value="{{ .Article.Title }}" class="form-group-sm form-control" maxlength="64" placeholder="请输入文章标题" />
             </td>
         </tr>
         <tr>
             <th>分类</th>
             <td>
                 <select id="category" name="category">
-                    {{ $name := .Article.Category }}
-                    {{ range .Categories }}
+                    {{ $name := .Article.Category }} {{ range .Categories }}
                     <option value="{{ .Name }}" {{ if eq .Name $name }}selected{{ end }}>{{ .Name }}</option>
                     {{ end }}
                 </select>
@@ -29,8 +28,7 @@
             <th>完成</th>
             <td>
                 <input id="id" name="id" type="hidden" value="{{ .Article.Id }}" />
-                <input type="submit" value="发布" id="save" class="input-item-submit btn btn-default btn-xs" />
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="submit" value="发布" id="save" class="input-item-submit btn btn-default btn-xs" /> &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="button" value="返回" id="back" class="input-item-button btn btn-default btn-xs" onClick="history.back()" />
                 <span id="formtip"></span>
             </td>

@@ -1,0 +1,44 @@
+<form id="usercreateform" method="post" action="/manager/user/create">
+    <table border="0" cellpadding="0" cellspacing="0" class="form">
+        <tr>
+            <th width="100px">电子邮件</th>
+            <td>
+                <input type="text" id="username" name="username" class="input-item-text" maxlength="64" placeholder="请输入电子邮件" />
+                <p class="tips">该用户的电子邮件，请保证该邮件可以正常使用，将用以发布通知</p>
+            </td>
+        </tr>
+        <tr>
+            <th>用户密码</th>
+            <td>
+                <input type="password" id="passone" name="passone" class="input-item-text" maxlength="16" placeholder="请输入用户密码" />
+                <p class="tips">设置一个密码，这个密码可以由字母、数字和下划线组成，长度保持 6-16 个字符</p>
+            </td>
+        </tr>
+        <tr>
+            <th>重复密码</th>
+            <td>
+                <input type="password" id="passtwo" name="passtwo" class="input-item-text" maxlength="16" placeholder="输入密码保持一致" />
+                <p class="tips">再次输入密码以保持一致</p>
+            </td>
+        </tr>
+        <tr>
+            <th>用户状态</th>
+            <td>
+                <input type="radio" id="state1" name="state" value="1" checked />
+                <label for="state1">正常</label>
+                &nbsp;&nbsp;
+                <input type="radio" id="state0" name="state" value="0" />
+                <label for="state0">冻结</label>
+            </td>
+        </tr>
+        <tr>
+            <th>完成</th>
+            <td>
+                <input id="save" type="submit" value="立即保存" class="input-item-submit btn btn-default btn-xs" /> &nbsp;&nbsp;
+                <input id="back" type="button" value="返回" class="input-item-button btn btn-default btn-xs" onClick="history.back()" /> &nbsp;&nbsp;
+                <img src="/static/img/ajaxing.gif" class="ajax-load-wait hide" title="loading..." />
+                <span id="formtip"></span>
+            </td>
+        </tr>
+    </table>
+</form>

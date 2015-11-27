@@ -1,78 +1,51 @@
-<div class="modal fade image-upload" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">裁剪图片</h4>
+<table border="0" cellpadding="0" cellspacing="0" class="list table table-striped">
+    <tr>
+        <th width="5%">ID</th>
+        <th width="40%">标题</th>
+        <th width="30%">分类</th>
+        <th width="10%">状态</th>
+        <th width="15%" class="article-center">操作</th>
+    </tr>
+    {{ if .Articles }} {{ range .Articles }}
+    <tr>
+        <td valign="top">{{ .Id }}</td>
+        <td>
+            <div class="article fl">
+                <p class="title">
+                    <a href="" title="">{{ .Title }}</a>
+                </p>
+                <p class="author">发布于 {{ .Created }} 被阅读 {{ .Views }} 次</p>
             </div>
-            <div class="modal-body">
-                <form id="titlecropform" method="post" action="/upload/crop"></form>
+        </td>
+        <td>
+            <div class="article fl">
+                <p class="title">{{ .Category }}</p>
             </div>
-            <div class="modal-footer">
-                <span id="croptips"></span>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">保存</button>
-            </div>
-        </div>
-    </div>
-</div>
-<form id="titleform" method="post" enctype="multipart/form-data">
-    <table border="0" cellpadding="0" cellspacing="0" class="list table table-striped">
-        <tr>
-            <th width="5%">ID</th>
-            <th width="40%">标题</th>
-            <th width="30%">分类</th>
-            <th width="10%">状态</th>
-            <th width="15%" class="article-center">操作</th>
-        </tr>
-        {{ if .Articles }}
-            {{ range .Articles }}
-        <tr>
-            <td valign="top">{{ .Id }}</td>
-            <td>
-                <div class="article fl">
-                    <p class="title">
-                        <a href="" title="">{{ .Title }}</a>
-                    </p>
-                    <p class="author">发布于 {{ .Created }} 被阅读 {{ .Views }} 次</p>
-                </div>
-            </td>
-            <td>
-                <div class="article fl">
-                    <p class="title">{{ .Category }}</p>
-                </div>
-            </td>
-            <td>
-                {{ if eq .State  1 }}
-                <span class="status-1">已发布</span>
-                {{ else }}
-                <span class="status-2">回收站</span>
-                {{ end }}
-            </td>
-            <td class="article-btn article-center">
-                <a href="/manager/article/edit/{{ .Id }}" class="update glyphicon glyphicon-pencil" title="编辑"></a>
-                {{ if eq .State 0 }}
-                <a href="javascript:;" data-id="" class="return glyphicon glyphicon-home" title="恢复正常"></a>
-                {{ else }}
-                <a href="javascript:;" data-id="" class="trash glyphicon glyphicon-trash" title="放到回收站"></a>
-                {{ end }}
-                <a href="javascript:;" data-id="" class="delete glyphicon glyphicon-remove" title="删除"></a>
-            </td>
-        </tr>
-        {{ end }}
-        {{ else }}
-        <tr>
-            <td colspan="5" class="null">
-                还没有文章，赶快去
-                <a href="/manager/article/create">写文章</a>
-                吧！
-            </td>
-        </tr>
-        {{ end }}
-    </table>
-</form>
+        </td>
+        <td>
+            {{ if eq .State 1 }}
+            <span class="status-1">已发布</span> {{ else }}
+            <span class="status-2">回收站</span> {{ end }}
+        </td>
+        <td class="article-btn article-center">
+            <a href="/manager/article/edit/{{ .Id }}" class="update glyphicon glyphicon-pencil" title="编辑"></a>
+            {{ if eq .State 0 }}
+            <a href="javascript:;" data-id="" class="return glyphicon glyphicon-home" title="恢复正常"></a>
+            {{ else }}
+            <a href="javascript:;" data-id="" class="trash glyphicon glyphicon-trash" title="放到回收站"></a>
+            {{ end }}
+            <a href="javascript:;" data-id="" class="delete glyphicon glyphicon-remove" title="删除"></a>
+        </td>
+    </tr>
+    {{ end }} {{ else }}
+    <tr>
+        <td colspan="5" class="null">
+            还没有文章，赶快去
+            <a href="/manager/article/create">写文章</a> 吧！
+        </td>
+    </tr>
+    {{ end }}
+</table>
 <div style="text-align:center">
     <div cla></div>
     {{if .paginator.HasPages}}
@@ -91,27 +64,25 @@
         <li class="disabled">
             <a>&laquo;</a>
         </li>
-        {{end}}
-         {{range $index, $page := .paginator.Pages}}
-        <li{{if $.paginator.IsActive .}} class="active"{{end}}>
+        {{end}} {{range $index, $page := .paginator.Pages}}
+        <li{{if $.paginator.IsActive .}} class="active" {{end}}>
             <a href="{{$.paginator.PageLink $page}}">{{$page}}</a>
-        </li>
-        {{end}}
-         {{if .paginator.HasNext}}
-        <li>
-            <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
-        </li>
-        <li>
-            <a href="{{.paginator.PageLinkLast}}">{{ .paginator.last_page }}</a>
-        </li>
-        {{else}}
-        <li class="disabled">
-            <a>&raquo;</a>
-        </li>
-        <li class="disabled">
-            <a>{{ .paginator.last_page }}</a>
-        </li>
-        {{end}}
+            </li>
+            {{end}} {{if .paginator.HasNext}}
+            <li>
+                <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
+            </li>
+            <li>
+                <a href="{{.paginator.PageLinkLast}}">{{ .paginator.last_page }}</a>
+            </li>
+            {{else}}
+            <li class="disabled">
+                <a>&raquo;</a>
+            </li>
+            <li class="disabled">
+                <a>{{ .paginator.last_page }}</a>
+            </li>
+            {{end}}
     </ul>
     {{end}}
 </div>

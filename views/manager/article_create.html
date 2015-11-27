@@ -1,15 +1,15 @@
-<form id="articleform" method="post" action="/manager/article/create">
+<form id="articlecreateform" method="post" action="/manager/article/create">
     <table border="0" cellpadding="0" cellspacing="0" class="form">
         <tr>
             <th>标题</th>
             <td>
-                <input type="text" id="title" name="title" class="form-group-sm form-control" maxlength="64" placeholder="请输入文章标题"/>
+                <input type="text" id="title" name="title" class="form-group-sm form-control" maxlength="64" placeholder="请输入文章标题" />
             </td>
         </tr>
         <tr>
             <th>分类</th>
             <td>
-                <select id="category" name="category">
+                <select name="category">
                     {{ range .Categories }}
                     <option value="{{ .Name }}">{{ .Name }}</option>
                     {{ end }}

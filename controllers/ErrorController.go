@@ -8,12 +8,15 @@ type ErrorController struct {
 	beego.Controller
 }
 
-func (e *ErrorController) Error404() {
-	e.Data["Content"] = "page not found"
-	e.TplNames = "error/404.html"
+func (this *ErrorController) Error404() {
+	this.Data["Content"] = "page not found"
+	this.TplNames = "error/404.html"
 }
 
-func (e *ErrorController) ErrorDb() {
-	e.Data["Content"] = "database is down"
-	e.TplNames = "error/db.html"
+func (this *ErrorController) ErrorDb() {
+	this.Data["Content"] = "database is down"
+	this.TplNames = "error/db.html"
 }
+
+/* End of file  : ErrorController.go */
+/* Location     : ./controllers/ErrorController.go */
