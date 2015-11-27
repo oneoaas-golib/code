@@ -2,5 +2,64 @@
 $(function() {
     $('.bs-docs-sidenav').children('li').eq(3).addClass('active');
     $('.menu-user-create').addClass('active-min');
+    var isEmail = function(email) {
+        var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+        if (re.test(email)) {
+            return true;
+        }
+        return false;
+    }
+    $('#usercreateform').ajaxForm({
+        dataType: 'json',
+        beforeSubmit: function() {
+            if ($.trim($('#username').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入电子邮件!");
+                return false;
+            }
+            if (!isEmail($.trim($('#username').val()))) {
+                $('#formtip').css("color", "red").html("电子邮件格式不正确，请重新输入!");
+                return false;
+            }
+            if ($.trim($('#password').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入用户密码!");
+                return false;
+            }
+            if ($.trim($('#password').val()).length < 6) {
+                $('#formtip').css("color", "red").html("请输入 6-16 位用户密码!");
+                return false;
+            }
+            if ($.trim($('#repassword').val()) == '') {
+                $('#formtip').css("color", "red").html("请再次输入用户密码!");
+                return false;
+            }
+            if ($.trim($('#password').val()) != $.trim($('#repassword').val())) {
+                $('#formtip').css("color", "red").html("两次输入的密码不一致!")
+                return false;
+            }
+            $('#formtip').removeClass('color ').html('');
+            $("#save").attr({"disabled": "disabled"});
+            $("#back").attr({"disabled": "disabled"});
+        },
+        success: function(response) {
+            $("#save").removeAttr("disabled");
+            $("#back").removeAttr("disabled");
+            $('#formtip').css("color", "red").html(response.info);
+            var d = dialog({
+                title: '提示 ： ',
+                content: response.info
+            });
+            d.showModal();
+            setTimeout(function() {
+                d.close().remove();
+            }, 2000);
+            if (response.code === 'success') {
+                $("#save").attr({"disabled": "disabled"});
+                $("#back").attr({"disabled": "disabled"});
+                setTimeout(function() {
+                    window.location = "/manager/user";
+                }, 2200)
+            }
+        }
+    });
 });
 </script>

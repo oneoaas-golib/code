@@ -1,4 +1,72 @@
 <script type="text/javascript">
 $(function() {
+    $('.bs-docs-sidenav').children('li').eq(3).addClass('active');
+    $('.menu-user-all').addClass('active-min');
+    $('#usereditform').ajaxForm({
+        dataType: 'json',
+        beforeSubmit: function() {
+            if ($.trim($('#email').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入电子邮件!");
+                return false;
+            }
+            if (!isEmail($.trim($('#email').val()))) {
+                $('#formtip').css("color", "red").html("电子邮件格式不正确，请重新输入!");
+                return false;
+            }
+            if ($.trim($('#name').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入用户姓名!");
+                return false;
+            }
+            if ($.trim($('#password').val()) != '') {
+                if ($.trim($('#password').val()).length < 6) {
+                    $('#formtip').css("color", "red").html("请输入 6-16 位用户密码!");
+                    return false;
+                }
+                if ($.trim($('#repassword').val()) == '') {
+                    $('#formtip').css("color", "red").html("请再次输入用户密码!");
+                    return false;
+                }
+                if ($.trim($('#password').val()) != $.trim($('#repassword').val())) {
+                    $('#formtip').css("color", "red").html("两次输入的密码不一致!")
+                    return false;
+                }
+            }
+            if ($.trim($('#description').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入用户的简单介绍!");
+                return false;
+            }
+            $('#formtip').removeClass('color').html('');
+            $("#save").attr({
+                "disabled": "disabled"
+            });
+            $("#back").attr({
+                "disabled": "disabled"
+            });
+        },
+        success: function(response) {
+            $("#save").removeAttr("disabled");
+            $("#back").removeAttr("disabled");
+            $('#formtip').css("color", "red").html(response.info).addClass(response.code);
+            var d = dialog({
+                title: '提示 ： ',
+                content: response.info
+            });
+            d.showModal();
+            setTimeout(function() {
+                d.close().remove();
+            }, 2000);
+            if (response.code === 'success') {
+                $("#save").attr({
+                    "disabled": "disabled"
+                });
+                $("#back").attr({
+                    "disabled": "disabled"
+                });
+                setTimeout(function() {
+                    window.location = "{{ site_url('manager/user') }}";
+                }, 2200)
+            }
+        }
+    });
 });
 </script>

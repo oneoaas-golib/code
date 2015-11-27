@@ -25,5 +25,32 @@ $(function() {
         imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL: "/upload",
     });
+    $('#articleeditform').ajaxForm({
+        dataType: "json",
+        beforeSubmit: function() {
+            if ($.trim($('#title').val()) == "") {
+                $("#formtip").css("color", "red").html("请输入文章标题！");
+                return false;
+            }
+            if ($.trim($("#content").val()) == "") {
+                $("#formtip").css("color", "red").html("请输入文章内容！");
+                return false
+            }
+            $("#formtip").removeClass('color').html('');
+            $("#save").attr({"disabled": "disabled"});
+            $("#back").attr({"disabled": "disabled"});
+        },
+        success: function(response) {
+            $("#formtip").css("color", "red").html(response.info);
+            if (response.code == "success") {
+                setTimeout(function() {
+                    window.location = "/manager/article";
+                }, 200);
+            } else {
+                $("#save").removeAttr('disabled');
+                $("#back").removeAttr('disabled');
+            }
+        }
+    });
 });
 </script>
