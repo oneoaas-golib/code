@@ -17,21 +17,6 @@ type Category struct {
 	Updated     time.Time `orm:"index;auro_now;type(datetime)"`
 }
 
-//设置表名
-func (this *Category) TableName() string {
-	return "category"
-}
-
-//设置引擎
-func (this *Category) TableEngine() string {
-	return "INNODB"
-}
-
-//初始化函数，注册模型
-func init() {
-	orm.RegisterModel(new(Category))
-}
-
 //添加分类
 func AddCategory(name, desc string) error {
 	o := orm.NewOrm()
@@ -113,6 +98,7 @@ func GetCategories(page string, pagenum int64) ([]*Category, error) {
 	return categories, err
 }
 
+//获取所有的分类
 func GetAllCategories() ([]*Category, error) {
 	o := orm.NewOrm()
 	categories := make([]*Category, 0)

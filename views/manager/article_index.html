@@ -40,6 +40,11 @@
                 </div>
             </td>
             <td>
+                <div class="article fl">
+                    <p class="title">{{ .Category }}</p>
+                </div>
+            </td>
+            <td>
                 {{ if eq .State  1 }}
                 <span class="status-1">已发布</span>
                 {{ else }}
@@ -47,7 +52,7 @@
                 {{ end }}
             </td>
             <td class="article-btn article-center">
-                <a href="" class="update glyphicon glyphicon-pencil" title="编辑"></a>
+                <a href="/manager/article/edit/{{ .Id }}" class="update glyphicon glyphicon-pencil" title="编辑"></a>
                 {{ if eq .State 0 }}
                 <a href="javascript:;" data-id="" class="return glyphicon glyphicon-home" title="恢复正常"></a>
                 {{ else }}
@@ -68,3 +73,45 @@
         {{ end }}
     </table>
 </form>
+<div style="text-align:center">
+    <div cla></div>
+    {{if .paginator.HasPages}}
+    <ul class="pagination pagination">
+        {{if .paginator.HasPrev}}
+        <li>
+            <a href="{{.paginator.PageLinkFirst}}">{{ .paginator.first_page }}</a>
+        </li>
+        <li>
+            <a href="{{.paginator.PageLinkPrev}}">&laquo;</a>
+        </li>
+        {{else}}
+        <li class="disabled">
+            <a>{{ .paginator.first_page }}</a>
+        </li>
+        <li class="disabled">
+            <a>&laquo;</a>
+        </li>
+        {{end}}
+         {{range $index, $page := .paginator.Pages}}
+        <li{{if $.paginator.IsActive .}} class="active"{{end}}>
+            <a href="{{$.paginator.PageLink $page}}">{{$page}}</a>
+        </li>
+        {{end}}
+         {{if .paginator.HasNext}}
+        <li>
+            <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
+        </li>
+        <li>
+            <a href="{{.paginator.PageLinkLast}}">{{ .paginator.last_page }}</a>
+        </li>
+        {{else}}
+        <li class="disabled">
+            <a>&raquo;</a>
+        </li>
+        <li class="disabled">
+            <a>{{ .paginator.last_page }}</a>
+        </li>
+        {{end}}
+    </ul>
+    {{end}}
+</div>

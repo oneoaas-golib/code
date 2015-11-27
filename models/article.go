@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"time"
 )
 
@@ -19,20 +18,6 @@ type Article struct {
 	Views    int64     `orm:"index"`
 }
 
-//自定义表名
-func (this *Article) TableName() string {
-	return "article"
-}
-
-//自定义引擎
-func (this *Article) TableEngine() string {
-	return "INNODB"
-}
-
-func init() {
-	orm.RegisterModel(new(Article))
-}
-
 //添加文章
 func AddArticle(title, category, content string) error {
 	o := orm.NewOrm()
@@ -41,6 +26,7 @@ func AddArticle(title, category, content string) error {
 		Category: category,
 		Content:  content,
 		Updated:  time.Now(),
+		State:    1,
 	}
 	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
 		if !created {
@@ -60,15 +46,7 @@ func AddArticle(title, category, content string) error {
 }
 
 //修改文章
-func EditArticle(tid, title, category, content, state string) error {
-	id, err := strconv.ParseInt(tid, 10, 64)
-	if err != nil {
-		return err
-	}
-	_state, err := strconv.Atoi(state)
-	if err != nil {
-		return nil
-	}
+func EditArticle(id int64, title, category, content string) error {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
 	var oldCategory string
@@ -79,15 +57,15 @@ func EditArticle(tid, title, category, content, state string) error {
 		article.Title = title
 		article.Category = category
 		article.Content = content
-		article.State = _state
-		_, err = o.Update(article)
+		_, err := o.Update(article)
 		if err != nil {
 			return err
 		}
 	}
+
 	if len(oldCategory) > 0 {
 		cate := new(Category)
-		err = o.QueryTable("category").Filter("name", oldCategory).One(cate)
+		err := o.QueryTable("category").Filter("name", oldCategory).One(cate)
 		if err != nil {
 			return err
 		}
@@ -96,7 +74,7 @@ func EditArticle(tid, title, category, content, state string) error {
 	}
 
 	cate := new(Category)
-	err = o.QueryTable("category").Filter("name", category).One(cate)
+	err := o.QueryTable("category").Filter("name", category).One(cate)
 	if err == nil {
 		cate.Count++
 		_, err = o.Update(cate)
@@ -105,21 +83,19 @@ func EditArticle(tid, title, category, content, state string) error {
 }
 
 //删除文章
-func DelArticle(aid string) error {
-	id, err := strconv.ParseInt(aid, 10, 64)
-	if err != nil {
-		return nil
-	}
+func DelArticle(id int64) error {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
 	var oldCategory string
-	if o.Read(article) == nil {
+	err := o.Read(article)
+	if err == nil {
 		oldCategory = article.Category
 		_, err = o.Delete(article)
 		if err != nil {
 			return err
 		}
 	}
+
 	if len(oldCategory) > 0 {
 		cate := new(Category)
 		err = o.QueryTable("category").Filter("name", oldCategory).One(cate)
@@ -133,14 +109,10 @@ func DelArticle(aid string) error {
 }
 
 //获取一篇文章
-func GetArticle(aid string) (*Article, error) {
-	id, err := strconv.ParseInt(aid, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetArticle(id int64) (*Article, error) {
 	article := &Article{Id: id}
 	o := orm.NewOrm()
-	err = o.Read(article)
+	err := o.Read(article)
 	if err != nil {
 		return nil, err
 	}
@@ -150,33 +122,25 @@ func GetArticle(aid string) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(page string, pagenum int64) ([]*Article, error) {
-	p, err := strconv.ParseInt(page, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetArticles(offset, pagenum int) ([]*Article, error) {
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
-	_, err = o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(pagenum).Offset((p - 1) * pagenum).All(&articles)
+	_, err := o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(pagenum).Offset(offset).All(&articles)
 	return articles, err
 }
 
 //获取文章的总数
-func GetCountAll() (count int64, err error) {
+func GetArticleCount() (count int64, err error) {
 	o := orm.NewOrm()
 	count, err = o.QueryTable("article").Count()
 	return
 }
 
 //移动到回收站
-func RemoveToRecycle(aid string) error {
-	id, err := strconv.ParseInt(aid, 10, 64)
-	if err != nil {
-		return err
-	}
+func RemoveToTrash(id int64) error {
 	o := orm.NewOrm()
 	article := Article{Id: id}
-	err = o.Read(&article)
+	err := o.Read(&article)
 	if err != nil {
 		return err
 	}
@@ -186,14 +150,10 @@ func RemoveToRecycle(aid string) error {
 }
 
 //从回收站恢复
-func RecoveryFromRecycle(aid string) error {
-	id, err := strconv.ParseInt(aid, 10, 64)
-	if err != nil {
-		return err
-	}
+func ReturnFromTrash(id int64) error {
 	o := orm.NewOrm()
 	article := Article{Id: id}
-	err = o.Read(&article)
+	err := o.Read(&article)
 	if err != nil {
 		return err
 	}

@@ -25,6 +25,7 @@ func (this *CategoryController) Get() {
 
 //创建分类
 func (this *CategoryController) Create() {
+	//显示创建分类的页面
 	if this.Ctx.Input.Method() == "GET" {
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/category_create.html"
@@ -32,7 +33,7 @@ func (this *CategoryController) Create() {
 		this.LayoutSections["HtmlHead"] = "manager/category_create_heade.html"
 		return
 	}
-
+	//处理创建分类的请求
 	name := this.GetString("name")
 	desc := this.GetString("description")
 	if name == "" || desc == "" {
@@ -40,7 +41,6 @@ func (this *CategoryController) Create() {
 		this.ServeJson()
 		return
 	}
-
 	err := models.AddCategory(name, desc)
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
@@ -59,7 +59,7 @@ func (this *CategoryController) Delete() {
 	}
 	id := this.GetString("id")
 	if id == "" {
-		this.Data["json"] = map[string]string{"code": "error", "info": "请求错误！"}
+		this.Data["json"] = map[string]string{"code": "error", "info": "必填选项不能为空！"}
 		this.ServeJson()
 		return
 	}

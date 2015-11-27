@@ -17,21 +17,6 @@ type User struct {
 	Updated  time.Time `orm:"index;auto_noe;type(datetime)"`
 }
 
-//设置表名
-func (this *User) TableName() string {
-	return "user"
-}
-
-//设置引擎
-func (this *User) TableEngine() string {
-	return "INNODB"
-}
-
-//注册模型
-func init() {
-	orm.RegisterModel(new(User))
-}
-
 //添加初始用户
 func AddAdmin() error {
 	username := "admin@fun-x.cn"
@@ -70,6 +55,7 @@ func CheckLogin(username, password string) error {
 	return nil
 }
 
+//添加用户
 func AddUser(username, password string) error {
 	o := orm.NewOrm()
 	user := &User{
@@ -87,6 +73,7 @@ func AddUser(username, password string) error {
 	return err
 }
 
+//修改用户
 func EditUser(uid, username, password string) error {
 	id, err := strconv.ParseInt(uid, 10, 64)
 	if err != nil {
@@ -108,6 +95,7 @@ func EditUser(uid, username, password string) error {
 	return err
 }
 
+//删除用户
 func DelUser(uid string) error {
 	id, err := strconv.ParseInt(uid, 10, 64)
 	if err != nil {
@@ -119,6 +107,7 @@ func DelUser(uid string) error {
 	return err
 }
 
+//获取用户
 func GetUser(uid string) (*User, error) {
 	id, err := strconv.ParseInt(uid, 10, 64)
 	if err != nil {
@@ -130,6 +119,7 @@ func GetUser(uid string) (*User, error) {
 	return user, err
 }
 
+//获取用户列表
 func GetUsers(page string, pagenum int64) ([]*User, error) {
 	_page, err := strconv.ParseInt(page, 10, 64)
 	if err != nil {
