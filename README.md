@@ -1,1 +1,1 @@
-# code
+# my first blog with beego
