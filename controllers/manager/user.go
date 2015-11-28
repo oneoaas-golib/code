@@ -30,6 +30,7 @@ func (this *UserController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	this.Data["Title"] = "管理后台 - 用户列表"
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/user_index.html"
 	this.LayoutSections = make(map[string]string)
@@ -41,6 +42,7 @@ func (this *UserController) Get() {
 func (this *UserController) Create() {
 	//显示创建用户的页面
 	if this.Ctx.Input.Method() == "GET" {
+		this.Data["Title"] = "管理后台 - 创建用户"
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/user_create.html"
 		this.LayoutSections = make(map[string]string)
@@ -85,6 +87,7 @@ func (this *UserController) Edit() {
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Title"] = "管理后台 - 修改用户"
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/user_edit.html"
 		this.LayoutSections = make(map[string]string)

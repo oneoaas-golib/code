@@ -41,6 +41,7 @@ func (this *ArticleController) Get() {
 		beego.Error(err)
 	}
 	this.Data["IsTrash"] = atype == "trash"
+	this.Data["Title"] = "管理后台 - 所有文章"
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/article_index.html"
 	this.LayoutSections = make(map[string]string)
@@ -56,6 +57,7 @@ func (this *ArticleController) Create() {
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Title"] = "管理后台 - 创建文章"
 		this.Data["Categories"] = categories
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/article_create.html"
@@ -119,6 +121,7 @@ func (this *ArticleController) Edit() {
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Title"] = "管理后台 - 修改文章"
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/article_edit.html"
 		this.LayoutSections = make(map[string]string)
@@ -161,6 +164,7 @@ func (this *ArticleController) View() {
 	if err != nil {
 		beego.Error(err)
 	}
+	this.Data["Title"] = "管理后台 - 预览文章"
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/article_view.html"
 	this.LayoutSections = make(map[string]string)

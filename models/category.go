@@ -109,5 +109,12 @@ func GetCategoryCount() (int64, error) {
 	return count, err
 }
 
+//通过分类名称获取分类数量
+func GetCateCountByName(name string) (int64, error) {
+	o := orm.NewOrm()
+	count, err := o.QueryTable("category").Filter("Name", name).Count()
+	return count, err
+}
+
 /* End of file : category.go */
 /* Location : ./models/category.go */

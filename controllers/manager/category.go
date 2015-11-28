@@ -27,7 +27,7 @@ func (this *CategoryController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-
+	this.Data["Title"] = "管理后台 - 所有分类"
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/category_index.html"
 	this.LayoutSections = make(map[string]string)
@@ -38,6 +38,7 @@ func (this *CategoryController) Get() {
 func (this *CategoryController) Create() {
 	//显示创建分类的页面
 	if this.Ctx.Input.Method() == "GET" {
+		this.Data["Title"] = "管理后台 - 创建分类"
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/category_create.html"
 		this.LayoutSections = make(map[string]string)
@@ -91,6 +92,7 @@ func (this *CategoryController) Edit() {
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Title"] = "管理后台 - 修改分类"
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/category_edit.html"
 		this.LayoutSections = make(map[string]string)

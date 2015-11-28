@@ -1,0 +1,6 @@
+{{ range .Articles }}
+<div class="page-header">
+    <h1><a href="/posts/{{ .Id }}">{{ .Title }}</a></h1>
+    <h6 class="text-muted">文章发表于 {{ date .Created "Y-m-d H:i:s" }}，共有 {{ .Views }} 次浏览</h6>
+</div>
+{{ end }}
