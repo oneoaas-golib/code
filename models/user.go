@@ -14,6 +14,7 @@ type User struct {
 	Password string    `orm:"size(64)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Login    time.Time `orm:"index;auto_noe;type(datetime)"`
+	State    int
 }
 
 //添加初始用户
@@ -60,6 +61,7 @@ func AddUser(username, password string) error {
 	user := &User{
 		Username: username,
 		Password: password,
+		Login:    time.Now(),
 	}
 	created, _, err := o.ReadOrCreate(user, "Username")
 	if err == nil {
@@ -110,7 +112,7 @@ func GetUser(id int64) (*User, error) {
 func GetUsers(offset, pagesize int) ([]*User, error) {
 	o := orm.NewOrm()
 	users := make([]*User, 0)
-	_, err := o.QueryTable("user").Limit(pagesize).Offset(offset).OrderBy("-Created").All(users)
+	_, err := o.QueryTable("user").Limit(pagesize).Offset(offset).OrderBy("-Created").All(&users)
 	return users, err
 }
 

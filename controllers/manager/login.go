@@ -66,6 +66,7 @@ func (this *LoginController) Post() {
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
+		this.SetSession(SESSION_KEY, username)
 		this.Data["json"] = map[string]string{"code": "success", "info": "登录成功！"}
 	}
 	this.ServeJson()

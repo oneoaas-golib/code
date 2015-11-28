@@ -32,7 +32,6 @@ func (this *CategoryController) Get() {
 	this.TplNames = "manager/category_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/category_index_heade.html"
-	this.LayoutSections["Pagination"] = "manager/pagination.html"
 }
 
 //创建分类

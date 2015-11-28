@@ -43,13 +43,14 @@
                     <a href="javascript:control_nav(0)">文章管理</a>
                     <dl class="nav-min">
                         <dd class="menu-article-all">
-                            <a href="/manager/article">所有文章</a>
+                            <a href="/manager/article/all">所有文章</a>
                         </dd>
                         <dd class="menu-article-create">
                             <a href="/manager/article/create">写文章</a>
                         </dd>
                         <dd class="menu-article-trash">
-                            <a href="/manager/article/trash"> <em class="badge">11</em> 回收站
+                            <a href="/manager/article/trash">
+                                回收站 <em class="badge">{{ getarticletrash }}</em>
                             </a>
                         </dd>
                     </dl>

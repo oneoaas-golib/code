@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(function() {
-    $('.bs-docs-sidenav').children('li').eq(3).addClass('active');
+    $('.bs-docs-sidenav').children('li').eq(2).addClass('active');
     $('.menu-user-create').addClass('active-min');
     var isEmail = function(email) {
         var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -20,19 +20,19 @@ $(function() {
                 $('#formtip').css("color", "red").html("电子邮件格式不正确，请重新输入!");
                 return false;
             }
-            if ($.trim($('#password').val()) == '') {
+            if ($.trim($('#passone').val()) == '') {
                 $('#formtip').css("color", "red").html("请输入用户密码!");
                 return false;
             }
-            if ($.trim($('#password').val()).length < 6) {
+            if ($.trim($('#passone').val()).length < 6) {
                 $('#formtip').css("color", "red").html("请输入 6-16 位用户密码!");
                 return false;
             }
-            if ($.trim($('#repassword').val()) == '') {
+            if ($.trim($('#passtwo').val()) == '') {
                 $('#formtip').css("color", "red").html("请再次输入用户密码!");
                 return false;
             }
-            if ($.trim($('#password').val()) != $.trim($('#repassword').val())) {
+            if ($.trim($('#passone').val()) != $.trim($('#passtwo').val())) {
                 $('#formtip').css("color", "red").html("两次输入的密码不一致!")
                 return false;
             }

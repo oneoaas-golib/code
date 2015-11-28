@@ -14,32 +14,43 @@ type ArticleController struct {
 
 // 显示文章首页
 func (this *ArticleController) Get() {
+	//获取类型
+	atype := this.Ctx.Input.Param(":type")
+	var state []int
+	if "trash" != atype {
+		state = []int{1}
+	} else {
+		state = []int{0}
+	}
+
 	// 处理分页
 	pageSize, err := beego.AppConfig.Int("pagesize")
 	if err != nil {
 		beego.Error(err)
 	}
-	count, err := models.GetArticleCount()
+	count, err := models.GetArticleCount(state)
 	if err != nil {
 		beego.Error(err)
 	}
 	paginator := pagination.NewPaginator(this.Ctx.Request, pageSize, count)
 	this.Data["paginator"] = paginator
+
 	// 查询数据库
-	this.Data["Articles"], err = models.GetArticles(paginator.Offset(), pageSize)
+	this.Data["Articles"], err = models.GetArticles(paginator.Offset(), pageSize, state)
 	if err != nil {
 		beego.Error(err)
 	}
+	this.Data["IsTrash"] = atype == "trash"
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/article_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/article_index_heade.html"
-	this.LayoutSections["Pagination"] = "manager/pagination.html"
 	return
 }
 
 // 创建文章
 func (this *ArticleController) Create() {
+	//显示创建的页面
 	if this.Ctx.Input.Method() == "GET" {
 		categories, err := models.GetAllCategories()
 		if err != nil {
@@ -170,7 +181,7 @@ func (this *ArticleController) RemoveToTrash() {
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
-		this.Data["json"] = map[string]string{"code": "success"}
+		this.Data["json"] = map[string]string{"code": "success", "info": "文章移动到了回收站！"}
 	}
 	this.ServeJson()
 	return
@@ -189,7 +200,7 @@ func (this *ArticleController) ReturnFromTrash() {
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
-		this.Data["json"] = map[string]string{"code": "success"}
+		this.Data["json"] = map[string]string{"code": "success", "info": "文章恢复成功！"}
 	}
 	this.ServeJson()
 	return

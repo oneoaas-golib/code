@@ -3,7 +3,11 @@
 $(function() {
     var imageCrop = $('.image-upload');
     $('.bs-docs-sidenav').children('li').eq(0).addClass('active');
+    {{ if .IsTrash }}
+    $('.menu-article-trash').addClass('active-min');
+    {{ else }}
     $('.menu-article-all').addClass('active-min');
+    {{ end }}
     //删除文章
     var deleteFunction = function(id) {
         $.ajax({
@@ -47,31 +51,30 @@ $(function() {
     });
     //从回收站恢复
     var returnTrash = function(id) {
-            $.ajax({
-                url: '/manager/article/return',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    var d = dialog({
-                        title: '提示 ： ',
-                        content: response.info
-                    });
-                    d.showModal();
+        $.ajax({
+            url: '/manager/article/return',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function(response) {
+                var d = dialog({
+                    title: '提示 ： ',
+                    content: response.info
+                });
+                d.showModal();
+                setTimeout(function() {
+                    d.close().remove();
+                }, 2000);
+                if (response.code == 'success') {
                     setTimeout(function() {
-                        d.close().remove();
-                    }, 2000);
-                    if (response.code == 'success') {
-                        setTimeout(function() {
-                            window.location = "/manager/article/trash";
-                        }, 2200);
-                    }
+                        window.location = "/manager/article/trash";
+                    }, 2200);
                 }
-            });
-        }
-        //
+            }
+        });
+    }
     $('.return').on('click', function() {
         var id = $(this).attr('data-id');
         var d = dialog({
@@ -106,7 +109,7 @@ $(function() {
                 }, 2000);
                 if (response.code == 'success') {
                     setTimeout(function() {
-                        window.location = "/manager/article";
+                        window.location = "/manager/article/all";
                     }, 2200);
                 }
             }

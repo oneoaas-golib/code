@@ -1,6 +1,47 @@
 <script type="text/javascript">
 $(function() {
-    $('.bs-docs-sidenav').children('li').eq(3).addClass('active');
+    $('.bs-docs-sidenav').children('li').eq(2).addClass('active');
     $('.menu-user-all').addClass('active-min');
+    var deleteFunction = function(id) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/manager/user/del',
+            data: {
+                id: id
+            },
+            success: function(response) {
+                var d = dialog({
+                    title: '提示 ： ',
+                    content: response.info
+                });
+                d.showModal();
+                setTimeout(function() {
+                    d.close().remove();
+                }, 2000);
+                if (response.code == 'success') {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 2200);
+                }
+            }
+        });
+    }
+    $('.delete-user').on('click', function() {
+        console.log('xxx');
+        var id = $(this).data("id")
+        console.log(id);
+        var d = dialog({
+            title: '提示：',
+            content: '真的要删除这个用户吗！',
+            okValue: '确定',
+            ok: function() {
+                deleteFunction(id);
+            },
+            cancelValue: '取消',
+            cancel: function() {}
+        });
+        d.showModal();
+    });
 });
 </script>

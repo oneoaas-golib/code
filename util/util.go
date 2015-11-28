@@ -31,3 +31,20 @@ func Md5(str string) string {
 	io.WriteString(hashMd5, str)
 	return fmt.Sprintf("%x", hashMd5.Sum(nil))
 }
+
+func FileExists(name string) bool {
+	if _, err := os.Stat(name); err != nil {
+		if os.IsExist(err) {
+			return true
+		}
+	}
+	return false
+}
+
+func CreateFile(name string) error {
+	_, err := os.Create(name)
+	if err != nil {
+		return err
+	}
+	return err
+}

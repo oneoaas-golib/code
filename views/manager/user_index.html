@@ -13,22 +13,67 @@
         <td>
             <p class="title">{{ .Username }}</p>
         </td>
-        <td>{{ .User.Created }}</td>
-        <td>{{ .User.Login }}</td>
+        <td>{{ date .Created "Y-m-d H:i:s" }}</td>
+        <td>{{ date .Login "Y-m-d H:i:s" }}</td>
         <td>
-            {{ if eq .User.State 0 }}
-            <span class="status-0">已冻结</span> {{ else if eq .User.State 1 }}
-            <span class="status-1">正常</span> {{ end }}
+            {{ if eq .State 0 }}
+            <span class="status-0">已冻结</span>
+            {{ else if eq .State 1 }}
+            <span class="status-1">正常</span>
+            {{ end }}
         </td>
         <td>
-            <a href="/manager/user/edit/{{ .Id }}" class="update">编辑</a> -
-            <a href="javascript:;" class="delete-user" data-id="{{ .Id }}" class="delete">删除</a>
+            <a href="/manager/user/edit/{{ .Id }}" class="update">编辑</a>
+            -
+            <a href="javascript:;" class="delete-user" data-id="{{ .Id }}" >删除</a>
         </td>
     </tr>
     {{ end }} {{ else }}
     <tr>
-        <td colspan="6" class="null">还没有用户，赶快去<a href="/manager/user/create">创建用户</a> 吧！
+        <td colspan="6" class="null">
+            还没有用户，赶快去
+            <a href="/manager/user/create">创建用户</a>
+            吧！
         </td>
     </tr>
     {{ end }}
 </table>
+<div style="text-align:center">
+    {{if .paginator.HasPages}}
+    <ul class="pagination pagination">
+        {{if .paginator.HasPrev}}
+        <li>
+            <a href="{{.paginator.PageLinkFirst}}">首页</a>
+        </li>
+        <li>
+            <a href="{{.paginator.PageLinkPrev}}">&laquo;</a>
+        </li>
+        {{else}}
+        <li class="disabled">
+            <a>首页</a>
+        </li>
+        <li class="disabled">
+            <a>&laquo;</a>
+        </li>
+        {{end}} {{range $index, $page := .paginator.Pages}}
+        <li{{if $.paginator.IsActive .}} class="active" {{end}}>
+            <a href="{{$.paginator.PageLink $page}}">{{$page}}</a>
+        </li>
+        {{end}} {{if .paginator.HasNext}}
+        <li>
+            <a href="{{.paginator.PageLinkNext}}">&raquo;</a>
+        </li>
+        <li>
+            <a href="{{.paginator.PageLinkLast}}">末页</a>
+        </li>
+        {{else}}
+        <li class="disabled">
+            <a>&raquo;</a>
+        </li>
+        <li class="disabled">
+            <a>末页</a>
+        </li>
+        {{end}}
+    </ul>
+    {{end}}
+</div>

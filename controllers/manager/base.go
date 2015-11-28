@@ -10,10 +10,10 @@ type BaseController struct {
 }
 
 func (this *BaseController) Prepare() {
-	// if !IsLogin(this.Ctx) {
-	// 	this.Redirect("/manager/login", 301)
-	// 	return
-	// }
+	if !IsLogin(this.Ctx) {
+		this.Redirect("/manager/login", 301)
+		return
+	}
 }
 
 func (this *BaseController) IsAjax() {

@@ -1,7 +1,14 @@
 <script type="text/javascript">
 $(function() {
-    $('.bs-docs-sidenav').children('li').eq(3).addClass('active');
+    $('.bs-docs-sidenav').children('li').eq(2).addClass('active');
     $('.menu-user-all').addClass('active-min');
+    var isEmail = function(email) {
+        var re = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+        if (re.test(email)) {
+            return true;
+        }
+        return false;
+    }
     $('#usereditform').ajaxForm({
         dataType: 'json',
         beforeSubmit: function() {
@@ -13,23 +20,29 @@ $(function() {
                 $('#formtip').css("color", "red").html("电子邮件格式不正确，请重新输入!");
                 return false;
             }
-            if ($.trim($('#passone').val()) != '') {
-                if ($.trim($('#passone').val()).length < 6) {
-                    $('#formtip').css("color", "red").html("请输入 6-16 位用户密码!");
-                    return false;
-                }
-                if ($.trim($('#passtwo').val()) == '') {
-                    $('#formtip').css("color", "red").html("请再次输入用户密码!");
-                    return false;
-                }
-                if ($.trim($('#passone').val()) != $.trim($('#passtwo').val())) {
-                    $('#formtip').css("color", "red").html("两次输入的密码不一致!")
-                    return false;
-                }
+            if ($.trim($('#passone').val()) == '') {
+                $('#formtip').css("color", "red").html("请输入用户密码!");
+                return false;
             }
-            $('#formtip').removeClass('color').html('');
-            $("#save").attr({"disabled": "disabled"});
-            $("#back").attr({"disabled": "disabled"});
+            if ($.trim($('#passone').val()).length < 6) {
+                $('#formtip').css("color", "red").html("请输入 6-16 位用户密码!");
+                return false;
+            }
+            if ($.trim($('#passtwo').val()) == '') {
+                $('#formtip').css("color", "red").html("请再次输入用户密码!");
+                return false;
+            }
+            if ($.trim($('#passone').val()) != $.trim($('#passtwo').val())) {
+                $('#formtip').css("color", "red").html("两次输入的密码不一致!")
+                return false;
+            }
+            $('#formtip').removeClass('color ').html('');
+            $("#save").attr({
+                "disabled": "disabled"
+            });
+            $("#back").attr({
+                "disabled": "disabled"
+            });
         },
         success: function(response) {
             $("#save").removeAttr("disabled");
@@ -44,8 +57,12 @@ $(function() {
                 d.close().remove();
             }, 2000);
             if (response.code === 'success') {
-                $("#save").attr({"disabled": "disabled"});
-                $("#back").attr({"disabled": "disabled"});
+                $("#save").attr({
+                    "disabled": "disabled"
+                });
+                $("#back").attr({
+                    "disabled": "disabled"
+                });
                 setTimeout(function() {
                     window.location = "/manager/user";
                 }, 2200)

@@ -123,17 +123,17 @@ func GetArticle(id int64) (*Article, error) {
 }
 
 //获取文章列表
-func GetArticles(offset, pagenum int) ([]*Article, error) {
+func GetArticles(offset, pagenum int, state []int) ([]*Article, error) {
 	articles := make([]*Article, 0)
 	o := orm.NewOrm()
-	_, err := o.QueryTable("article").Filter("State", 1).OrderBy("-Created").Limit(pagenum).Offset(offset).All(&articles)
+	_, err := o.QueryTable("article").Filter("State__in", state).OrderBy("-Created").Limit(pagenum).Offset(offset).All(&articles)
 	return articles, err
 }
 
 //获取文章的总数
-func GetArticleCount() (count int64, err error) {
+func GetArticleCount(states []int) (count int64, err error) {
 	o := orm.NewOrm()
-	count, err = o.QueryTable("article").Count()
+	count, err = o.QueryTable("article").Filter("State__in", states).Count()
 	return
 }
 
@@ -154,7 +154,7 @@ func RemoveToTrash(id int64) error {
 func ReturnFromTrash(id int64) error {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
-	if err := o.Read(&article); err == nil {
+	if err := o.Read(article); err == nil {
 		article.State = 1
 		_, err = o.Update(article)
 		return err

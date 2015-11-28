@@ -14,6 +14,7 @@ type UserController struct {
 
 //显示用户首页
 func (this *UserController) Get() {
+	//处理分页
 	pagesize, err := beego.AppConfig.Int("pagesize")
 	if err != nil {
 		beego.Error(err)
@@ -24,36 +25,33 @@ func (this *UserController) Get() {
 	}
 	paginator := pagination.NewPaginator(this.Ctx.Request, pagesize, count)
 	this.Data["paginator"] = paginator
+	//获取用户列表
 	this.Data["Users"], err = models.GetUsers(paginator.Offset(), pagesize)
 	if err != nil {
 		beego.Error(err)
 	}
-
 	this.Layout = "manager/layout.html"
 	this.TplNames = "manager/user_index.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["HtmlHead"] = "manager/user_index_heade.html"
-	this.LayoutSections["Pagination"] = "manager/pagination.html"
-	if err != nil {
-		beego.Error(err)
-	}
+	return
 }
 
 //创建用户
 func (this *UserController) Create() {
-
+	//显示创建用户的页面
 	if this.Ctx.Input.Method() == "GET" {
-		this.Layout = "manager/lauout.html"
+		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/user_create.html"
 		this.LayoutSections = make(map[string]string)
 		this.LayoutSections["HtmlHead"] = "manager/user_create_heade.html"
 		return
 	}
-
-	name := this.GetString("name")
+	//处理创建用户的请求
+	username := this.GetString("username")
 	passone := this.GetString("passone")
 	passtwo := this.GetString("passtwo")
-	if name == "" || passone == "" || passtwo == "" {
+	if username == "" || passone == "" || passtwo == "" {
 		this.Data["json"] = map[string]string{"code": "error", "info": "必填选项不能为空！"}
 		this.ServeJson()
 		return
@@ -64,7 +62,7 @@ func (this *UserController) Create() {
 		return
 	}
 
-	err := models.AddUser(name, passone)
+	err := models.AddUser(username, passone)
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
@@ -76,6 +74,7 @@ func (this *UserController) Create() {
 
 // 修改用户
 func (this *UserController) Edit() {
+	//显示修改用户的页面
 	if this.Ctx.Input.Method() == "GET" {
 		id := this.Ctx.Input.Param(":id")
 		intid, err := strconv.ParseInt(id, 10, 64)
@@ -92,14 +91,11 @@ func (this *UserController) Edit() {
 		this.LayoutSections["HtmlHead"] = "manager/user_edit_heade.html"
 		return
 	}
-
+	//处理修改用户请求
 	id, err := this.GetInt64("id")
 	if err != nil {
-		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
-		this.ServeJson()
-		return
+		beego.Error(err)
 	}
-
 	username := this.GetString("username")
 	passone := this.GetString("passone")
 	passtwo := this.GetString("passtwo")

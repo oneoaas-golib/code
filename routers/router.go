@@ -15,7 +15,7 @@ func init() {
 	beego.Router("/manager/login", &manager.LoginController{})
 	beego.Router("/manager/logout", &manager.LoginController{}, "get:Logout")
 
-	beego.Router("/manager/article", &manager.ArticleController{})
+	beego.Router("/manager/article/:type:string", &manager.ArticleController{})
 	beego.Router("/manager/article/create", &manager.ArticleController{}, "get,post:Create")
 	beego.Router("/manager/article/edit/:id([0-9]+)", &manager.ArticleController{}, "get:Edit")
 	beego.Router("/manager/article/edit", &manager.ArticleController{}, "post:Edit")

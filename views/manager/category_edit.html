@@ -18,8 +18,9 @@
             <th>完成</th>
             <td>
                 <input type="hidden" name="id" value="{{ .Category.Id }}" />
-                <input type="submit" id="save" value="立即保存" class="input-item-submit btn btn-default btn-xs" /> &nbsp;&nbsp;&nbsp;
-                <input type="button" id="back" value="返回" class="input-item-button btn btn-default btn-xs" onClick="history.back()" /> &nbsp;&nbsp;&nbsp;
+                <input type="submit" id="save" value="保存" class="input-item-submit btn btn-default btn-xs" />
+                &nbsp;&nbsp;&nbsp;
+                <input type="button" id="back" value="返回" class="input-item-button btn btn-default btn-xs" onClick="history.back()" />
                 <img src="/static/img/ajaxing.gif" class="ajax-load-wait hide" title="loading..." />
                 <span id="formtip"></span>
             </td>
