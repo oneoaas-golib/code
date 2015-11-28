@@ -20,11 +20,11 @@ func main() {
 	beego.SetLogger("file", `{"filename":"./logs/logs.log"}`)
 	// beego.BeeLogger.DelLogger("console")
 	//注册模板函数
-	beego.AddFuncMap("getarticletrash", GetArticleTrash)
+	beego.AddFuncMap("getarticletrash", GetArticleTrashCount)
 	beego.Run()
 }
 
-func GetArticleTrash() int64 {
+func GetArticleTrashCount() int64 {
 	count, _ := models.GetArticleCount([]int{0})
 	return count
 }

@@ -38,7 +38,7 @@ func (this *IndexController) Get() {
 }
 
 func (this *IndexController) Posts() {
-	id := this.Ctx.Input.Param("id")
+	id := this.Ctx.Input.Param(":id")
 	intid, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		beego.Error(err)
@@ -47,7 +47,13 @@ func (this *IndexController) Posts() {
 	if err != nil {
 		this.Abort("404")
 	}
+	this.Data["Categories"], err = models.GetAllCategories()
+	if err != nil {
+		beego.Error(err)
+	}
 	this.Layout = "index/layout.html"
-	this.TplNames = "index/index.html"
+	this.TplNames = "index/view.html"
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["HtmlHead"] = "index/view_heade.html"
 	return
 }

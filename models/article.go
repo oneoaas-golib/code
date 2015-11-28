@@ -11,7 +11,7 @@ type Article struct {
 	Id       int64
 	Title    string    `orm:"size(64);unique"`
 	Category string    `orm:"size(32)"`
-	Content  string    `orm:"size(5000)"`
+	Content  string    `orm:"size(10000)"`
 	Created  time.Time `orm:"index;auto_now_add;type(datetime)"`
 	Updated  time.Time `orm:"index;auto_now;type(datetime)"`
 	State    int       `orm:"index;default(1)"`
@@ -135,6 +135,13 @@ func GetArticleCount(states []int) (count int64, err error) {
 	o := orm.NewOrm()
 	count, err = o.QueryTable("article").Filter("State__in", states).Count()
 	return
+}
+
+//通过分类的名称来获取文章的数量
+func GetArticleCountByCate(name string) (int64, error) {
+	o := orm.NewOrm()
+	count, err := o.QueryTable("article").Filter("Category", name).Count()
+	return count, err
 }
 
 //移动到回收站

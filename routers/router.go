@@ -8,6 +8,7 @@ import (
 
 func init() {
 	beego.Router("/", &index.IndexController{})
+	beego.Router("/posts/:id([0-9]+)", &index.IndexController{}, "get:Posts")
 
 	beego.Router("/upload", &manager.UploadController{}, "post:Post")
 
