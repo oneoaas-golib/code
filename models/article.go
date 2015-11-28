@@ -29,20 +29,20 @@ func AddArticle(title, category, content string) error {
 		State:    1,
 	}
 	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
-		if !created {
+		if created {
+			cate := &Category{Name: category}
+			err = o.Read(cate, "Name")
+			if err != nil {
+				cate.Count++
+				_, err = o.Update(cate, "Count")
+			}
+			return err
+		} else {
 			return errors.New("文章标题已经存在")
 		}
 	} else {
 		return err
 	}
-	//更新分类下面的文章数量
-	cate := &Category{Name: category}
-	err := o.Read(cate, "Name")
-	if err != nil {
-		cate.Count++
-		_, err = o.Update(cate, "Count")
-	}
-	return err
 }
 
 //修改文章
@@ -50,7 +50,8 @@ func EditArticle(id int64, title, category, content string) error {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
 	var oldCategory string
-	if o.Read(article) == nil {
+	err := o.Read(article)
+	if err == nil {
 		if article.Category != category {
 			oldCategory = article.Category
 		}
@@ -64,20 +65,21 @@ func EditArticle(id int64, title, category, content string) error {
 	}
 
 	if len(oldCategory) > 0 {
-		cate := new(Category)
-		err := o.QueryTable("category").Filter("name", oldCategory).One(cate)
-		if err != nil {
+		oldcate := new(Category)
+		err := o.QueryTable("category").Filter("Name", oldCategory).One(oldcate)
+		if err == nil {
+			oldcate.Count--
+			_, err = o.Update(oldcate)
+		} else {
 			return err
 		}
-		cate.Count--
-		_, err = o.Update(cate)
-	}
 
-	cate := new(Category)
-	err := o.QueryTable("category").Filter("name", category).One(cate)
-	if err == nil {
-		cate.Count++
-		_, err = o.Update(cate)
+		newcate := new(Category)
+		err = o.QueryTable("category").Filter("Name", category).One(newcate)
+		if err == nil {
+			newcate.Count++
+			_, err = o.Update(newcate)
+		}
 	}
 	return err
 }
