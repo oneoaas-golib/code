@@ -43,8 +43,5 @@ func FileExists(name string) bool {
 
 func CreateFile(name string) error {
 	_, err := os.Create(name)
-	if err != nil {
-		return err
-	}
 	return err
 }
