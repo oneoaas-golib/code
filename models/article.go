@@ -19,7 +19,7 @@ type Article struct {
 }
 
 //添加文章
-func AddArticle(title, category, content string) error {
+func AddArticle(title, category, content string) (err error) {
 	o := orm.NewOrm()
 	article := &Article{
 		Title:    title,
@@ -28,30 +28,27 @@ func AddArticle(title, category, content string) error {
 		Updated:  time.Now(),
 		State:    1,
 	}
-	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
+	if created, _, err = o.ReadOrCreate(article, "Title"); err == nil {
 		if created {
 			cate := &Category{Name: category}
 			err = o.Read(cate, "Name")
-			if err != nil {
+			if err == nil {
 				cate.Count++
-				_, err = o.Update(cate, "Count")
+				_, err = o.Update(cate)
 			}
-			return err
 		} else {
-			return errors.New("文章标题已经存在")
+			err = errors.New("文章标题已经存在")
 		}
-	} else {
-		return err
 	}
+	return
 }
 
 //修改文章
-func EditArticle(id int64, title, category, content string) error {
+func EditArticle(id int64, title, category, content string) (err error) {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
 	var oldCategory string
-	err := o.Read(article)
-	if err == nil {
+	if err = o.Read(article); err == nil {
 		if article.Category != category {
 			oldCategory = article.Category
 		}
@@ -60,18 +57,19 @@ func EditArticle(id int64, title, category, content string) error {
 		article.Content = content
 		_, err := o.Update(article)
 		if err != nil {
-			return err
+			return
 		}
 	}
 
 	if len(oldCategory) > 0 {
 		oldcate := new(Category)
-		err := o.QueryTable("category").Filter("Name", oldCategory).One(oldcate)
+		err = o.QueryTable("category").Filter("Name", oldCategory).One(oldcate)
 		if err == nil {
 			oldcate.Count--
 			_, err = o.Update(oldcate)
-		} else {
-			return err
+			if err != nil {
+				return
+			}
 		}
 
 		newcate := new(Category)
@@ -79,49 +77,51 @@ func EditArticle(id int64, title, category, content string) error {
 		if err == nil {
 			newcate.Count++
 			_, err = o.Update(newcate)
+			if err != nil {
+				return
+			}
 		}
 	}
-	return err
+	return
 }
 
 //删除文章
-func DelArticle(id int64) error {
+func DelArticle(id int64) (err error) {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
 	var oldCategory string
-	err := o.Read(article)
-	if err != nil {
-		return err
-	}
-	oldCategory = article.Category
-	_, err = o.Delete(article)
-	if err != nil {
-		return err
+	if err = o.Read(article); err == nil {
+		oldCategory = article.Category
+		_, err = o.Delete(article)
+		if err != nil {
+			return
+		}
+	} else {
+		return
 	}
 
 	if len(oldCategory) > 0 {
 		cate := new(Category)
 		err = o.QueryTable("category").Filter("Name", oldCategory).One(cate)
-		if err != nil {
-
+		if err == nil {
+			cate.Count--
+			_, err = o.Update(cate)
 		}
-		cate.Count--
-		_, err = o.Update(cate)
 	}
-	return err
+	return
 }
 
 //获取一篇文章
-func GetArticle(id int64) (*Article, error) {
-	article := &Article{Id: id}
+func GetArticle(id int64) (article *Article, err error) {
+	article.Id = id
 	o := orm.NewOrm()
-	if err := o.Read(article); err == nil {
+	err = o.Read(article)
+	if err == nil {
 		article.Views++
 		_, err = o.Update(article)
-		return article, err
-	} else {
-		return nil, err
+		return
 	}
+	return
 }
 
 //获取文章列表
@@ -140,36 +140,26 @@ func GetArticleCount(states []int) (count int64, err error) {
 }
 
 //通过分类的名称来获取文章的数量
-func GetArticleCountByCate(name string) (int64, error) {
+func GetArticleCountByCate(name string) (count int64, err error) {
 	o := orm.NewOrm()
-	count, err := o.QueryTable("article").Filter("Category", name).Count()
-	return count, err
+	count, err = o.QueryTable("article").Filter("Category", name).Count()
+	return
 }
 
-//移动到回收站
-func RemoveToTrash(id int64) error {
+//回收站操作 trash = true 移动到回收站,false 为恢复
+func Trash(id int64, trash bool) (err error) {
 	o := orm.NewOrm()
 	article := &Article{Id: id}
-	if err := o.Read(article); err == nil {
-		article.State = 0
+	if err = o.Read(article); err == nil {
+		if trash {
+			article.State = 0
+		} else {
+			article.State = 1
+		}
 		_, err = o.Update(article)
-		return err
-	} else {
-		return err
+		return
 	}
-}
-
-//从回收站恢复
-func ReturnFromTrash(id int64) error {
-	o := orm.NewOrm()
-	article := &Article{Id: id}
-	if err := o.Read(article); err == nil {
-		article.State = 1
-		_, err = o.Update(article)
-		return err
-	} else {
-		return err
-	}
+	return
 }
 
 /* End of file : article.go */

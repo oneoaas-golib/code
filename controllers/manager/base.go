@@ -9,6 +9,7 @@ type BaseController struct {
 	beego.Controller
 }
 
+//检测用户是否登录
 func (this *BaseController) Prepare() {
 	if !IsLogin(this.Ctx) {
 		this.Redirect("/manager/login", 301)
@@ -16,6 +17,7 @@ func (this *BaseController) Prepare() {
 	}
 }
 
+//检测是否是ajax请求
 func (this *BaseController) IsAjax() {
 	if !this.Ctx.Input.IsAjax() {
 		this.Abort("404")

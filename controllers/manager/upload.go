@@ -15,11 +15,11 @@ type UploadController struct {
 	beego.Controller
 }
 
+//处理上传文件
 func (this *UploadController) Post() {
 	//获取上传的文件
 	_, fileheader, err := this.GetFile("editormd-image-file")
 	if err != nil {
-		beego.Error(err)
 		this.Data["json"] = map[string]interface{}{"success": 0, "message": err.Error()}
 		this.ServeJson()
 		return
@@ -29,7 +29,9 @@ func (this *UploadController) Post() {
 	dirPath := "./upload/" + datePath
 	err = os.MkdirAll(dirPath, 0755)
 	if err != nil {
-		beego.Error(err)
+		this.Data["json"] = map[string]string{"success": 0, "message ": err.Error()}
+		this.ServeJson()
+		return
 	}
 	//生成文件名
 	nano := time.Now().UnixNano()

@@ -18,94 +18,84 @@ type User struct {
 }
 
 //添加初始用户
-func AddAdmin() error {
-	username := "admin@fun-x.cn"
-	password := util.Md5("admin")
+func AddAdmin() (err error) {
 	user := &User{
-		Username: username,
-		Password: password,
+		Username: "admin@fun-x.cn",
+		Password: util.Md5("admin"),
 		Login:    time.Now(),
 	}
 	o := orm.NewOrm()
-	created, _, err := o.ReadOrCreate(user, "Username")
-	if err == nil {
+	if created, _, err = o.ReadOrCreate(user, "Username"); err == nil {
 		if created {
-			return nil
+			return
 		} else {
-			return errors.New("用户名已经存在！")
+			err = errors.New("用户名已经存在！")
 		}
 	}
-	return err
+	return
 }
 
 //检测用户名密码正确
-func CheckLogin(username, password string) error {
+func CheckLogin(username, password string) (err error) {
 	o := orm.NewOrm()
 	user := &User{Username: username}
-	err := o.Read(user, "Username")
-	if err != nil {
-		if err == orm.ErrNoRows {
-			return errors.New("用户名不存在！")
+	if err = o.Read(user, "Username"); err == nil {
+		if util.Md5(password) != user.Password {
+			err = errors.New("用户密码错误！")
+			return
 		}
-		return err
+	} else if err == orm.ErrNoRows {
+		err = errors.New("用户名不存在！")
 	}
-	if util.Md5(password) != user.Password {
-		return errors.New("用户密码错误！")
-	}
-	return nil
+	return
 }
 
 //添加用户
-func AddUser(username, password string) error {
+func AddUser(username, password string) (err error) {
 	o := orm.NewOrm()
 	user := &User{
 		Username: username,
 		Password: password,
 		Login:    time.Now(),
 	}
-	created, _, err := o.ReadOrCreate(user, "Username")
-	if err == nil {
-		if created {
-			return nil
-		} else {
-			return errors.New("用户名已经存在！")
+	if created, _, err = o.ReadOrCreate(user, "Username"); err == nil {
+		if !created {
+			err = errors.New("用户名已经存在！")
 		}
 	}
 	return err
 }
 
 //修改用户
-func EditUser(id int64, username, password string) error {
+func EditUser(id int64, username, password string) (err error) {
 	user := &User{Id: id}
 	o := orm.NewOrm()
-	err := o.Read(user)
-	if err != nil {
-		return err
+	if err = o.Read(user); err == nil {
+		if user.Id != id {
+			err = errors.New("用户名已经存在！")
+			return
+		}
+		user.Username = username
+		user.Password = util.Md5(password)
+		_, err = o.Update(user)
 	}
-	user.Username = username
-	err = o.Read(user, "Username")
-	if err == nil && user.Id != id {
-		return errors.New("用户名已经存在！")
-	}
-	user.Password = util.Md5(password)
-	_, err = o.Update(user)
-	return err
+	return
 }
 
 //删除用户
-func DelUser(id int64) error {
+func DelUser(id int64) (err error) {
 	o := orm.NewOrm()
 	user := &User{Id: id}
-	_, err := o.Delete(user)
-	return err
+	_, err = o.Delete(user)
+	return
 }
 
 //获取用户
-func GetUser(id int64) (*User, error) {
+func GetUser(id int64) (user *User, err error) {
 	o := orm.NewOrm()
-	user := &User{Id: id}
-	err := o.Read(user)
-	return user, err
+	user.Id = id
+	err = o.Read(user)
+	return
 }
 
 //获取用户列表
@@ -117,10 +107,10 @@ func GetUsers(offset, pagesize int) ([]*User, error) {
 }
 
 // 获取用户的数量
-func GetUserCount() (int64, error) {
+func GetUserCount() (count int64, err error) {
 	o := orm.NewOrm()
-	count, err := o.QueryTable("user").Count()
-	return count, err
+	count, err = o.QueryTable("user").Count()
+	return
 }
 
 /* End of file 	: user.go */
