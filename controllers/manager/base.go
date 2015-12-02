@@ -12,7 +12,7 @@ type BaseController struct {
 //检测用户是否登录
 func (this *BaseController) Prepare() {
 	if !IsLogin(this.Ctx) {
-		this.Redirect("/manager/login", 301)
+		this.Redirect("/manager/login", 302)
 		return
 	}
 }

@@ -25,9 +25,9 @@ func AddAdmin() (err error) {
 		Login:    time.Now(),
 	}
 	o := orm.NewOrm()
-	if created, _, err = o.ReadOrCreate(user, "Username"); err == nil {
+	if created, _, err := o.ReadOrCreate(user, "Username"); err == nil {
 		if created {
-			return
+			return err
 		} else {
 			err = errors.New("用户名已经存在！")
 		}
@@ -58,9 +58,10 @@ func AddUser(username, password string) (err error) {
 		Password: password,
 		Login:    time.Now(),
 	}
-	if created, _, err = o.ReadOrCreate(user, "Username"); err == nil {
+	if created, _, err := o.ReadOrCreate(user, "Username"); err == nil {
 		if !created {
 			err = errors.New("用户名已经存在！")
+			return err
 		}
 	}
 	return err
@@ -91,11 +92,11 @@ func DelUser(id int64) (err error) {
 }
 
 //获取用户
-func GetUser(id int64) (user *User, err error) {
+func GetUser(id int64) (*User, error) {
 	o := orm.NewOrm()
-	user.Id = id
-	err = o.Read(user)
-	return
+	user := &User{Id: id}
+	err := o.Read(user)
+	return user, err
 }
 
 //获取用户列表

@@ -28,7 +28,7 @@ func AddArticle(title, category, content string) (err error) {
 		Updated:  time.Now(),
 		State:    1,
 	}
-	if created, _, err = o.ReadOrCreate(article, "Title"); err == nil {
+	if created, _, err := o.ReadOrCreate(article, "Title"); err == nil {
 		if created {
 			cate := &Category{Name: category}
 			err = o.Read(cate, "Name")
@@ -55,7 +55,7 @@ func EditArticle(id int64, title, category, content string) (err error) {
 		article.Title = title
 		article.Category = category
 		article.Content = content
-		_, err := o.Update(article)
+		_, err = o.Update(article)
 		if err != nil {
 			return
 		}
@@ -112,16 +112,16 @@ func DelArticle(id int64) (err error) {
 }
 
 //获取一篇文章
-func GetArticle(id int64) (article *Article, err error) {
-	article.Id = id
+func GetArticle(id int64) (*Article, error) {
+	article := &Article{Id: id}
 	o := orm.NewOrm()
-	err = o.Read(article)
+	err := o.Read(article)
 	if err == nil {
 		article.Views++
 		_, err = o.Update(article)
-		return
+		return article, err
 	}
-	return
+	return nil, err
 }
 
 //获取文章列表

@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"time"
 )
 
@@ -25,9 +24,9 @@ func AddCategory(name, desc string) (err error) {
 		Description: desc,
 		Updated:     time.Now(),
 	}
-	if created, _, err = o.ReadOrCreate(category, "Name"); err == nil {
+	if created, _, err := o.ReadOrCreate(category, "Name"); err == nil {
 		if created {
-			return
+			return err
 		} else {
 			err = errors.New("分类名称已经存在！")
 		}
@@ -62,11 +61,11 @@ func DelCategory(id int64) (err error) {
 }
 
 //获取一个分类
-func GetCategory(id int64) (cate *Category, err error) {
+func GetCategory(id int64) (*Category, error) {
 	o := orm.NewOrm()
-	cate.Id = id
-	err = o.Read(cate)
-	return
+	cate := &Category{Id: id}
+	err := o.Read(cate)
+	return cate, err
 }
 
 //获取分类列表

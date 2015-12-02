@@ -29,7 +29,7 @@ func (this *UploadController) Post() {
 	dirPath := "./upload/" + datePath
 	err = os.MkdirAll(dirPath, 0755)
 	if err != nil {
-		this.Data["json"] = map[string]string{"success": 0, "message ": err.Error()}
+		this.Data["json"] = map[string]interface{}{"success": 0, "message ": err.Error()}
 		this.ServeJson()
 		return
 	}

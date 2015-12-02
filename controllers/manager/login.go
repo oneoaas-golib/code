@@ -33,7 +33,7 @@ func (this *LoginController) Get() {
 	// 	beego.Error(err)
 	// }
 	if IsLogin(this.Ctx) {
-		this.Redirect("/manager", 301)
+		this.Redirect("/manager", 302)
 		return
 	}
 	this.TplNames = "manager/login.html"

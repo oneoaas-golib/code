@@ -94,7 +94,7 @@ func (this *CategoryController) Edit() {
 			this.Ctx.WriteString(err.Error())
 			return
 		}
-		this.Data["Category"], err = models.GetCategory(id)
+		this.Data["Category"], err = models.GetCategory(intid)
 		if err != nil {
 			this.Ctx.WriteString(err.Error())
 			return
