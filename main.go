@@ -17,7 +17,7 @@ func main() {
 	beego.SessionOn = true
 	beego.ErrorController(&controllers.ErrorController{})
 	beego.SetStaticPath("/upload", "upload")
-	beego.SetLogger("file", `{"filename":"./logs/logs.log"}`)
+	// beego.SetLogger("file", `{"filename":"./logs/logs.log"}`)
 	// beego.BeeLogger.DelLogger("console")
 	//注册模板函数
 	beego.AddFuncMap("getarticletrash", GetArticleTrashCount)

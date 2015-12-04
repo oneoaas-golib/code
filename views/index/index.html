@@ -1,6 +1,27 @@
-{{ range .Articles }}
-<div class="page-header">
-    <h1><a href="/posts/{{ .Id }}">{{ .Title }}</a></h1>
-    <h6 class="text-muted">文章发表于 {{ date .Created "Y-m-d H:i:s" }}，共有 {{ .Views }} 次浏览</h6>
-</div>
-{{ end }}
+<article class="main page">
+    <header class="header site">
+        <h1 class="title">若离</h1>
+        <h2 class="subtitle">Golang初学者</h2>
+    </header>
+    <ul class="article-list">
+    {{ range .Articles }}
+        <li class="article">
+            <a class="title" href="/posts/{{ .Id }}">{{ .Title }}</a>
+            <section class="preview">{{ .Views }}</section>
+            <section class="info">
+                <span class="date" data-time="1449036931">
+                    <span class="from"></span>
+                    <span class="date" data-time="1449036931">(<span class="from"></span> updated)</span>
+                </span>
+                <span class="tags">
+                    <a class="tag" href="">{{ .Category }}</a>
+                </span>
+            </section>
+        </li>
+    {{ end }}
+    </ul>
+    <section class="page-nav">
+        <span class="nav">1 / 2</span>
+        <a class="next" href="/page2.html">Next</a>
+    </section>
+</article>

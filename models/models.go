@@ -6,7 +6,7 @@ import (
 )
 
 //数据库的链接
-const DB_NAME = "root:28a316c6@/beego?charset=utf8&loc=Local"
+const DB_NAME = "root:root@/beego?charset=utf8&loc=Local"
 
 //注册模型
 func init() {
