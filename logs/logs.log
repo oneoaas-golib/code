@@ -1,0 +1,6 @@
+2015/12/12 18:44:22 [asm_amd64.s:1696] [I] http server Running on :8080
+2015/12/12 18:44:30 [router.go:854] [D] | GET        | /                                        | 10.494456ms      | match      | /                                        | 
+2015/12/12 18:44:31 [router.go:854] [D] | GET        | /                                        | 8.840897ms       | match      | /                                        | 
+2015/12/12 18:44:32 [router.go:854] [D] | GET        | /                                        | 7.193318ms       | match      | /                                        | 
+2015/12/12 18:44:32 [router.go:854] [D] | GET        | /                                        | 10.50287ms       | match      | /                                        | 
+2015/12/12 18:44:32 [router.go:854] [D] | GET        | /                                        | 8.803762ms       | match      | /                                        | 
