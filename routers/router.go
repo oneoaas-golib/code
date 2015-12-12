@@ -22,8 +22,7 @@ func init() {
 	beego.Router("/manager/article/edit", &manager.ArticleController{}, "post:Edit")
 	beego.Router("/manager/article/del", &manager.ArticleController{}, "post:Delete")
 	beego.Router("/manager/article/view/:id([0-9]+)", &manager.ArticleController{}, "get:View")
-	beego.Router("/manager/article/remove", &manager.ArticleController{}, "post:RemoveToTrash")
-	beego.Router("/manager/article/return", &manager.ArticleController{}, "post:ReturnFromTrash")
+	beego.Router("/manager/article/remove", &manager.ArticleController{}, "post:Trash")
 
 	beego.Router("/manager/category", &manager.CategoryController{})
 	beego.Router("/manager/category/create", &manager.CategoryController{}, "get,post:Create")

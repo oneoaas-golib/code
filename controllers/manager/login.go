@@ -26,27 +26,21 @@ func init() {
 	capt.ChallengeNums = 4
 }
 
-//在所有方法前面调用，如果登录既不能显示该页面了
-func (this *LoginController) Prepare() {
-	if IsLogin(this.Ctx) {
-		this.Redirect("/manager", 301)
-		return
-	}
-}
-
 func (this *LoginController) Get() {
 	//添加初始用户
 	// err := models.AddAdmin()
 	// if err != nil {
 	// 	beego.Error(err)
 	// }
+	if IsLogin(this.Ctx) {
+		this.Redirect("/manager", 302)
+		return
+	}
 	this.TplNames = "manager/login.html"
 }
 
 //处理提交的请求
 func (this *LoginController) Post() {
-	this.IsAjax()
-
 	//先判断验证码是否正确
 	if !capt.VerifyReq(this.Ctx.Request) {
 		this.Data["json"] = map[string]string{"code": "error", "info": "验证码错误！"}
@@ -87,3 +81,6 @@ func IsLogin(ctx *context.Context) bool {
 	}
 	return true
 }
+
+/* End of file 	: login.go */
+/* Location 	: ./controllers/manager/login.go */

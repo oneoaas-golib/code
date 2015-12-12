@@ -15,20 +15,20 @@ type UserController struct {
 //显示用户首页
 func (this *UserController) Get() {
 	//处理分页
-	pagesize, err := beego.AppConfig.Int("pagesize")
+	pageSize, err := beego.AppConfig.Int("pagesize")
 	if err != nil {
-		beego.Error(err)
+		pageSize = 10
 	}
 	count, err := models.GetUserCount()
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
-	paginator := pagination.NewPaginator(this.Ctx.Request, pagesize, count)
+	paginator := pagination.NewPaginator(this.Ctx.Request, pageSize, count)
 	this.Data["paginator"] = paginator
 	//获取用户列表
-	this.Data["Users"], err = models.GetUsers(paginator.Offset(), pagesize)
+	this.Data["Users"], err = models.GetUsers(paginator.Offset(), pageSize)
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	this.Data["Title"] = "管理后台 - 用户列表"
 	this.Layout = "manager/layout.html"
@@ -81,11 +81,13 @@ func (this *UserController) Edit() {
 		id := this.Ctx.Input.Param(":id")
 		intid, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			beego.Error(err)
+			this.Ctx.WriteString(err.Error())
+			return
 		}
 		this.Data["User"], err = models.GetUser(intid)
 		if err != nil {
-			beego.Error(err)
+			this.Ctx.WriteString(err.Error())
+			return
 		}
 		this.Data["Title"] = "管理后台 - 修改用户"
 		this.Layout = "manager/layout.html"
@@ -97,7 +99,9 @@ func (this *UserController) Edit() {
 	//处理修改用户请求
 	id, err := this.GetInt64("id")
 	if err != nil {
-		beego.Error(err)
+		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
+		this.ServeJson()
+		return
 	}
 	username := this.GetString("username")
 	passone := this.GetString("passone")
@@ -125,11 +129,10 @@ func (this *UserController) Edit() {
 
 // 删除用户
 func (this *UserController) Delete() {
-	this.IsAjax()
-
+	//计算用户数量,必须保留一个
 	count, err := models.GetUserCount()
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	if count == 1 {
 		this.Data["json"] = map[string]string{"code": "error", "info": "必须保留一个用户！"}
@@ -139,8 +142,11 @@ func (this *UserController) Delete() {
 
 	id, err := this.GetInt64("id")
 	if err != nil {
-		beego.Error(err)
+		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
+		this.ServeJson()
+		return
 	}
+
 	err = models.DelUser(id)
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}

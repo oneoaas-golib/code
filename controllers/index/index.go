@@ -7,10 +7,12 @@ import (
 	"strconv"
 )
 
+//博客前台的页面
 type IndexController struct {
 	beego.Controller
 }
 
+//博客首页
 func (this *IndexController) Get() {
 	//先处理分页
 	pageSize, err := beego.AppConfig.Int("pagesize")
@@ -37,11 +39,12 @@ func (this *IndexController) Get() {
 	return
 }
 
+//查看一篇文章
 func (this *IndexController) Posts() {
 	id := this.Ctx.Input.Param(":id")
 	intid, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	this.Data["Article"], err = models.GetArticle(intid)
 	if err != nil {
@@ -49,7 +52,7 @@ func (this *IndexController) Posts() {
 	}
 	this.Data["Categories"], err = models.GetAllCategories()
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	this.Layout = "index/layout.html"
 	this.TplNames = "index/view.html"
@@ -57,3 +60,6 @@ func (this *IndexController) Posts() {
 	this.LayoutSections["HtmlHead"] = "index/view_heade.html"
 	return
 }
+
+/* End of file 	: index.go */
+/* Location 	: ./controllers/index/index.go */

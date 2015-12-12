@@ -36,7 +36,6 @@ $(function() {
     }
     $('.delete').on('click', function() {
         var id = $(this).data("id")
-        console.log(id);
         var d = dialog({
             title: '提示：',
             content: '真的要删除这篇文章吗！',
@@ -52,11 +51,12 @@ $(function() {
     //从回收站恢复
     var returnTrash = function(id) {
         $.ajax({
-            url: '/manager/article/return',
+            url: '/manager/article/remove',
             type: 'POST',
             dataType: 'json',
             data: {
-                id: id
+                id: id,
+                trash : 'false'
             },
             success: function(response) {
                 var d = dialog({
@@ -96,7 +96,8 @@ $(function() {
             type: 'POST',
             dataType: 'json',
             data: {
-                id: id
+                id: id,
+                trash : 'true'
             },
             success: function(response) {
                 var d = dialog({

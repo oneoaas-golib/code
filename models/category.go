@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"github.com/astaxie/beego/orm"
-	"strconv"
 	"time"
 )
 
@@ -18,71 +17,54 @@ type Category struct {
 }
 
 //添加分类
-func AddCategory(name, desc string) error {
+func AddCategory(name, desc string) (err error) {
 	o := orm.NewOrm()
 	category := &Category{
 		Name:        name,
 		Description: desc,
 		Updated:     time.Now(),
 	}
-	created, _, err := o.ReadOrCreate(category, "Name")
-	if err == nil {
+	if created, _, err := o.ReadOrCreate(category, "Name"); err == nil {
 		if created {
-			return nil
+			return err
 		} else {
-			return errors.New("分类名称已经存在！")
+			err = errors.New("分类名称已经存在！")
 		}
 	}
-	return err
+	return
 }
 
 //修改分类
-func EditCategory(cid, name, desc string) error {
-	id, err := strconv.ParseInt(cid, 10, 64)
-	if err != nil {
-		return err
-	}
+func EditCategory(id int64, name, desc string) (err error) {
 	o := orm.NewOrm()
 	cate := &Category{Id: id}
-	err = o.Read(cate)
-	if err != nil {
-		return err
+	if err = o.Read(cate); err == nil {
+		cate.Name = name
+		cate.Description = desc
+		_, err = o.Update(cate)
 	}
-	cate.Name = name
-	cate.Description = desc
-	_, err = o.Update(cate)
-	return err
-
+	return
 }
 
 //删除分类
-func DelCategory(cid string) error {
-	id, err := strconv.ParseInt(cid, 10, 64)
-	if err != nil {
-		return err
-	}
+func DelCategory(id int64) (err error) {
 	o := orm.NewOrm()
 	cate := &Category{Id: id}
-	err = o.Read(cate)
-	if err != nil {
-		return err
+	if err = o.Read(cate); err == nil {
+		if cate.Count > 0 {
+			err = errors.New("分类下面还有文章，请先移除文章")
+		} else {
+			_, err = o.Delete(cate)
+		}
 	}
-	if cate.Count > 0 {
-		return errors.New("分类下面还有文章，请先移除文章")
-	}
-	_, err = o.Delete(cate)
-	return err
+	return
 }
 
 //获取一个分类
-func GetCategory(cid string) (*Category, error) {
-	id, err := strconv.ParseInt(cid, 10, 64)
-	if err != nil {
-		return nil, err
-	}
+func GetCategory(id int64) (*Category, error) {
 	o := orm.NewOrm()
 	cate := &Category{Id: id}
-	err = o.Read(cate)
+	err := o.Read(cate)
 	return cate, err
 }
 
@@ -103,17 +85,17 @@ func GetAllCategories() ([]*Category, error) {
 }
 
 //获取分类个数
-func GetCategoryCount() (int64, error) {
+func GetCategoryCount() (count int64, err error) {
 	o := orm.NewOrm()
-	count, err := o.QueryTable("category").Count()
-	return count, err
+	count, err = o.QueryTable("category").Count()
+	return
 }
 
 //通过分类名称获取分类数量
-func GetCateCountByName(name string) (int64, error) {
+func GetCateCountByName(name string) (count int64, err error) {
 	o := orm.NewOrm()
-	count, err := o.QueryTable("category").Filter("Name", name).Count()
-	return count, err
+	count, err = o.QueryTable("category").Filter("Name", name).Count()
+	return
 }
 
 /* End of file : category.go */

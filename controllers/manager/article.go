@@ -26,7 +26,7 @@ func (this *ArticleController) Get() {
 	// 处理分页
 	pageSize, err := beego.AppConfig.Int("pagesize")
 	if err != nil {
-		beego.Error(err)
+		pageSize = 10
 	}
 	count, err := models.GetArticleCount(state)
 	if err != nil {
@@ -53,12 +53,12 @@ func (this *ArticleController) Get() {
 func (this *ArticleController) Create() {
 	//显示创建的页面
 	if this.Ctx.Input.Method() == "GET" {
-		categories, err := models.GetAllCategories()
+		var err error
+		this.Data["Title"] = "管理后台 - 创建文章"
+		this.Data["Categories"], err = models.GetAllCategories()
 		if err != nil {
 			beego.Error(err)
 		}
-		this.Data["Title"] = "管理后台 - 创建文章"
-		this.Data["Categories"] = categories
 		this.Layout = "manager/layout.html"
 		this.TplNames = "manager/article_create.html"
 		this.LayoutSections = make(map[string]string)
@@ -86,8 +86,6 @@ func (this *ArticleController) Create() {
 
 // 删除文章
 func (this *ArticleController) Delete() {
-	this.IsAjax()
-
 	id, err := this.GetInt64("id")
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
@@ -111,7 +109,8 @@ func (this *ArticleController) Edit() {
 		id := this.Ctx.Input.Param(":id")
 		intid, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			beego.Error(err)
+			this.Ctx.WriteString(err.Error())
+			return
 		}
 		this.Data["Categories"], err = models.GetAllCategories()
 		if err != nil {
@@ -119,7 +118,7 @@ func (this *ArticleController) Edit() {
 		}
 		this.Data["Article"], err = models.GetArticle(intid)
 		if err != nil {
-			beego.Error(err)
+			this.Abort("404")
 		}
 		this.Data["Title"] = "管理后台 - 修改文章"
 		this.Layout = "manager/layout.html"
@@ -158,11 +157,11 @@ func (this *ArticleController) View() {
 	id := this.Ctx.Input.Param(":id")
 	intid, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	this.Data["Article"], err = models.GetArticle(intid)
 	if err != nil {
-		beego.Error(err)
+		this.Abort("404")
 	}
 	this.Data["Title"] = "管理后台 - 预览文章"
 	this.Layout = "manager/layout.html"
@@ -173,38 +172,24 @@ func (this *ArticleController) View() {
 }
 
 // 移动到回收站
-func (this *ArticleController) RemoveToTrash() {
-	this.IsAjax()
-
+func (this *ArticleController) Trash() {
 	id, err := this.GetInt64("id")
 	if err != nil {
-		beego.Error(err)
+		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
+		return
 	}
-
-	err = models.RemoveToTrash(id)
+	//判断操作
+	trash := this.GetString("trash")
+	if trash == "true" {
+		err = models.Trash(id, true)
+	} else {
+		err = models.Trash(id, false)
+	}
+	//判断操作结果
 	if err != nil {
 		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
 	} else {
 		this.Data["json"] = map[string]string{"code": "success", "info": "文章移动到了回收站！"}
-	}
-	this.ServeJson()
-	return
-}
-
-//从回收站恢复
-func (this *ArticleController) ReturnFromTrash() {
-	this.IsAjax()
-
-	id, err := this.GetInt64("id")
-	if err != nil {
-		beego.Error(err)
-	}
-
-	err = models.ReturnFromTrash(id)
-	if err != nil {
-		this.Data["json"] = map[string]string{"code": "error", "info": err.Error()}
-	} else {
-		this.Data["json"] = map[string]string{"code": "success", "info": "文章恢复成功！"}
 	}
 	this.ServeJson()
 	return
